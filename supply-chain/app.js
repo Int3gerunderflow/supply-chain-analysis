@@ -1,7 +1,8 @@
+require('express-async-errors')
+require('dotenv').config()
 const createError = require('http-errors');
 const express = require('express');
-const sql = require("mssql")
-require('express-async-errors')
+const mysql = require("mysql")
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -37,15 +38,20 @@ app.use(function(err, req, res, next) {
 const port = 8000
 
 //connecting to database
-const config = {
-  "user": "  ", 
-  "password": "  ", 
-  "server": "  ", 
-  "database": "Training", 
-  "options": {
-      "encrypt": false 
-  }
-}
+const connection = mysql.createConnection({
+  host: '127.0.0.1',
+  user: 'root',
+  password: process.env.DB_PASSWORD,
+  database: 'supplyschema'
+});
+connection.connect()
+
+connection.query('SELECT * FROM users', (err, rows, fields) => {
+  if (err) throw err
+
+  console.log(rows)
+})
+
 app.listen(port, console.log(`server is up and running on port ${port}`));
 
 module.exports = app;
