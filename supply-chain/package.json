@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "devstart": "nodemon ./bin/www",
+    "start": "node app.js",
+    "devstart": "nodemon app.js",
     "serverstart": "DEBUG=express-locallibrary-tutorial:* npm run devstart"
   },
   "dependencies": {
@@ -14,7 +14,8 @@
     "express-async-errors": "^3.1.1",
     "http-errors": "~1.6.3",
     "jade": "^1.9.2",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "mssql": "^11.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
