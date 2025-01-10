@@ -13,4 +13,18 @@ const getAllUsers = async () => {
     return result
 }
 
-module.exports = { getAllUsers }
+const insertIntoDatabase = async (params) => {
+    const {username, password, pfp} = params
+    try {
+        const [result, fields] = await connection.promise().query(`INSERT INTO users (username,passphrase,profilePicLocation) 
+            VALUES ('${username}', '${password}', '${pfp}')`);
+        return result
+    } catch (error) {
+        console.log(error)
+        return error.code
+    }
+    
+    
+}
+
+module.exports = { getAllUsers, insertIntoDatabase }

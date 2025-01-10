@@ -1,7 +1,8 @@
-const { getAllUsers } = require('../models/userModel')
+const { getAllUsers, insertIntoDatabase } = require('../models/userModel')
 
 const createUser = async (req,res)=>{
-    res.send("CREATE USER")
+    const result = await insertIntoDatabase(req.body)
+    res.send(result)
 }
 
 const getUser = async (req,res)=>{
@@ -14,7 +15,7 @@ const getUsers = async (req,res)=>{
     if(!result){
         res.send("ERROR")
     }
-    res.send(result[0])
+    res.send(result)
 }
 
 const updateUser = async (req,res)=>{
