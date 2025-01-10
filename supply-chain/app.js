@@ -2,7 +2,6 @@ require('express-async-errors')
 require('dotenv').config()
 const createError = require('http-errors');
 const express = require('express');
-const mysql = require("mysql")
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -19,7 +18,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/', usersRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -36,21 +35,6 @@ app.use(function(err, req, res, next) {
 });
 
 const port = 8000
-
-//connecting to database
-const connection = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: process.env.DB_PASSWORD,
-  database: 'supplyschema'
-});
-connection.connect()
-
-connection.query('SELECT * FROM users', (err, rows, fields) => {
-  if (err) throw err
-
-  console.log(rows)
-})
 
 app.listen(port, console.log(`server is up and running on port ${port}`));
 

@@ -1,3 +1,5 @@
+const { getAllUsers } = require('../models/userModel')
+
 const createUser = async (req,res)=>{
     res.send("CREATE USER")
 }
@@ -8,7 +10,11 @@ const getUser = async (req,res)=>{
 }
 
 const getUsers = async (req,res)=>{
-    res.send("GET MULTIPLE USERS")
+    const result = await getAllUsers()
+    if(!result){
+        res.send("ERROR")
+    }
+    res.send(result[0])
 }
 
 const updateUser = async (req,res)=>{
