@@ -1,4 +1,6 @@
-const { getAllUsers, insertIntoDatabase } = require('../models/userModel')
+const { getAllUsers, insertIntoDatabase, updateUserInDatabase, findUserIDByUsername,
+    deleteUserInDatabase
+ } = require('../models/userModel')
 
 const createUser = async (req,res)=>{
     const result = await insertIntoDatabase(req.body)
@@ -19,11 +21,29 @@ const getUsers = async (req,res)=>{
 }
 
 const updateUser = async (req,res)=>{
-    res.send("UPDATE USER")
+    const id = req.params.id
+    const result = await updateUserInDatabase({id,...req.body})
+    if(result.affectedRows < 1)
+    {
+        const error = new Error
+        error.status = 404
+        error.message = "No user found with that ID"
+        throw error
+    }
+    res.send(result)
 }
 
 const deleteUser = async (req,res)=>{
-    res.send("DELETE USER")
+    const id = req.params.id
+    const result = await deleteUserInDatabase(id)
+    if(result.affectedRows < 1)
+    {
+        const error = new Error
+        error.status = 404
+        error.message = "No user found with that ID"
+        throw error
+    }
+    res.send(result)
 }
 
 module.exports = {
