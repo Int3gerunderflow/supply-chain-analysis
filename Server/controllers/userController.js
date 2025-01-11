@@ -1,4 +1,4 @@
-const { getAllUsers, insertIntoDatabase, updateUserInDatabase, findUserIDByUsername,
+const { getAllUsers, insertIntoDatabase, updateUserInDatabase, getSingleUserByUsername,
     deleteUserInDatabase, getSingleUserByID
  } = require('../models/userModel')
 
@@ -7,7 +7,7 @@ const createUser = async (req,res)=>{
     res.send(result)
 }
 
-const getUser = async (req,res)=>{
+const getUserByID = async (req,res)=>{
     const id = req.params.id;
     const result = await getSingleUserByID(id)
     if(!result)
@@ -15,6 +15,19 @@ const getUser = async (req,res)=>{
         const error = new Error
         error.status = 404
         error.message = "No user found with that ID"
+        throw error
+    }
+    res.send(result)
+}
+
+const getUserByUsername = async (req,res)=>{
+    const username = req.params.username;
+    const result = await getSingleUserByUsername(username)
+    if(!result)
+    {
+        const error = new Error
+        error.status = 404
+        error.message = "No user found with that username"
         throw error
     }
     res.send(result)
@@ -56,7 +69,8 @@ const deleteUser = async (req,res)=>{
 
 module.exports = {
     createUser,
-    getUser,
+    getUserByID,
+    getUserByUsername,
     getUsers,
     updateUser,
     deleteUser

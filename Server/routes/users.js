@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController')
 
-//GET ONE SINGLE USER
-router.get('/:id', userController.getUser)
+//GET ONE SINGLE USER BY THEIR ID
+router.get('/byID/:id', userController.getUserByID)
+
+//GET ONE SINGLE USER BY THEIR USERNAME
+router.get('/byName/:username', userController.getUserByUsername)
 
 //GET MULTIPLE USERS
 router.get('/', userController.getUsers)

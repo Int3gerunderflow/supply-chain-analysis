@@ -20,9 +20,9 @@ const getSingleUserByID = async (id) => {
     return result[0]
 }
 
-const findUserIDByUsername = async (username) => {
-    const [result,fields]  = await connection.promise().execute(`SELECT id FROM users WHERE username='${username}';`)
-    return result[0].id
+const getSingleUserByUsername = async (username) => {
+    const [result,fields]  = await connection.promise().execute(`SELECT * FROM users WHERE username='${username}';`)
+    return result[0]
 }
 
 const insertIntoDatabase = async (params) => {
@@ -62,7 +62,7 @@ const deleteUserInDatabase = async (id) => {
 
 
 module.exports = { getAllUsers, 
-    findUserIDByUsername, 
+    getSingleUserByUsername, 
     insertIntoDatabase, 
     updateUserInDatabase, 
     deleteUserInDatabase,
