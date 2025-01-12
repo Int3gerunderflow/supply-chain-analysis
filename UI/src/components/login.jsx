@@ -9,7 +9,7 @@ function LoginPage(){
         try {
             const response = await fetch(`http://localhost:8000/users/byName/${username}`,{
                 mode: 'cors'
-            })
+            }).then(result => result.json())
             console.log(response)
         } catch (error) {
             console.log(error)

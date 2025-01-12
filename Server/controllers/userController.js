@@ -30,6 +30,8 @@ const getUserByUsername = async (req,res)=>{
         error.message = "No user found with that username"
         throw error
     }
+    res.setHeader("Access-Control-Allow-Origin", 'http://localhost:5173')
+    res.header("Access-Control-Allow-Credentials", true);
     res.send(result)
 }
 
