@@ -9,6 +9,7 @@ const cors = require('cors')
 //importing the routers
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const supplyRouter = require('./routes/supplyChainPosts');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors("*"))
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/posts', supplyRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
