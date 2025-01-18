@@ -20,6 +20,7 @@ const makeNewPost = async (params) => {
 
     let JSONstring = 'JSON_ARRAY('
     //convert the adjacencyList JSON into the appropriate SQL query
+    //build up a string with the appropriate syntax for the SQL database
     for (const entry in adjacencyList)
     {
         JSONstring += `JSON_OBJECT('${entry}',JSON_ARRAY(`
@@ -40,7 +41,20 @@ const makeNewPost = async (params) => {
     }
     JSONstring = JSONstring.substring(0,JSONstring.length-1)
     JSONstring += ')'
-    console.log(JSONstring)
+
+    /*for an input adjacency list JSON object the JSONstring should look like this in the end:
+
+    adjacencyList: 
+    {
+        "1":[15],
+        "14":[3,574,75,6,24]
+    }
+
+    vvvv  output result  vvvvv
+
+    JSON_ARRAY(JSON_OBJECT('1',JSON_ARRAY(15)),JSON_OBJECT('14',JSON_ARRAY(3,574,75,6,24)))
+    */
+
     try {
         const [result, fields] = await connection.promise().query(`INSERT INTO posts (userID, adjacencyList, product, company, description) 
             VALUES ('${userID}', ${JSONstring}, '${product}', '${company}', '${description}');`);
