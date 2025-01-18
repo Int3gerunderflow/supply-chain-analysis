@@ -15,4 +15,39 @@ const getSupplyChainPostDetails = async (postID) => {
     return result[0]
 }
 
-module.exports = { getSupplyChainPostDetails }
+const makeNewPost = async (params) => {
+    const {userID, adjacencyList, product, company, description} = params
+
+    let JSONstring = 'JSON_ARRAY('
+    //convert the adjacencyList JSON into the appropriate SQL query
+    for (const entry in adjacencyList)
+    {
+        JSONstring += `JSON_OBJECT('${entry}',JSON_ARRAY(`
+        const adjArray = adjacencyList[entry]
+        for (const neighbor of adjArray)
+        {
+            JSONstring += neighbor
+            JSONstring += ','
+        }
+
+        //if there were entries in the array take out the last character as it is an extra ','
+        if(adjArray.length)
+        {
+            JSONstring = JSONstring.substring(0,JSONstring.length-1)
+        }
+        
+        JSONstring += ')),'
+    }
+    JSONstring = JSONstring.substring(0,JSONstring.length-1)
+    JSONstring += ')'
+    console.log(JSONstring)
+    try {
+        const [result, fields] = await connection.promise().query(`INSERT INTO posts (userID, adjacencyList, product, company, description) 
+            VALUES ('${userID}', ${JSONstring}, '${product}', '${company}', '${description}');`);
+        return result
+    } catch (error) {
+        return error.code
+    } 
+}
+
+module.exports = { getSupplyChainPostDetails, makeNewPost }

@@ -1,4 +1,7 @@
-const { getSupplyChainPostDetails } = require("../models/supplyChainModel");
+const { 
+    getSupplyChainPostDetails,
+    makeNewPost
+ } = require("../models/supplyChainModel");
 
 const getPostDetails = async (req,res) => {
     const postID = req.params.postID;
@@ -13,4 +16,9 @@ const getPostDetails = async (req,res) => {
     res.send(result)
 }
 
-module.exports = { getPostDetails }
+const createNewPost = async (req,res) => {
+    const result = await makeNewPost(req.body)
+    res.send(result)
+}
+
+module.exports = { getPostDetails, createNewPost }
