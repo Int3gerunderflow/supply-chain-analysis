@@ -46,9 +46,13 @@ const loginUser = async (req,res)=>{
         throw error
     }
 
-    if(username === user.username && password === user.password)
+    if(username === user.username && password === user.passphrase)
     {
-        jwt.sign(user.id, process.env.AUTHKEY, {expiresIn: '1month'}, (err, token)=>{
+        const payload = {
+            id: user.id,
+            pfp: user.profilePicLocation
+        }
+        jwt.sign(payload, process.env.AUTHKEY, {expiresIn: "1h"}, (err, token)=>{
             if(err) throw err
             res.send(token)
         })
@@ -58,6 +62,7 @@ const loginUser = async (req,res)=>{
         const error = new Error
         error.status = 401
         error.message = "Wrong password"
+        throw error
     }
 }
 

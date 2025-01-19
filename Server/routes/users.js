@@ -10,7 +10,7 @@ router.get('/byID/:id', userController.getUserByID)
 router.get('/byName/:username', userController.getUserByUsername)
 
 //ATTEMPT USER LOGIN
-router.post('/login', checkToken, userController.loginUser)
+router.post('/login', userController.loginUser)
 
 //GET MULTIPLE USERS
 router.get('/', userController.getUsers)
