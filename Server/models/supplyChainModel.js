@@ -75,5 +75,26 @@ const makeNewSupplier = async (params) => {
     }
 }
 
+const getSupplierByID = async (supplyID) => {
+    const [result,fields] = await connection.promise().execute(`SELECT * FROM suppliers WHERE supplyID=${supplyID};`)
+    return result[0]
+}
 
-module.exports = { getSupplyChainPostDetails, makeNewPost, makeNewSupplier }
+const deletePostByID = async (postID) => {
+    try {
+        const [result, fields] = await connection.promise().query(`DELETE FROM posts WHERE postID=${postID};`);
+        return result
+    } catch (error) {
+        return error.code
+    } 
+}
+
+const deleteSupplierByID = async (supplyID) => {
+    try {
+        const [result, fields] = await connection.promise().query(`DELETE FROM suppliers WHERE supplyID=${postID};`);
+        return result
+    } catch (error) {
+        return error.code
+    } 
+}
+module.exports = { getSupplyChainPostDetails, getSupplierByID, makeNewPost, makeNewSupplier, deletePostByID, deleteSupplierByID }
