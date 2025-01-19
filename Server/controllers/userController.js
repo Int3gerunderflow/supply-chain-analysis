@@ -1,6 +1,7 @@
 const { getAllUsers, insertIntoDatabase, updateUserInDatabase, getSingleUserByUsername,
     deleteUserInDatabase, getSingleUserByID
- } = require('../models/userModel')
+ } = require('../models/userModel');
+const jwt = require('jsonwebtoken')
 
 const createUser = async (req,res)=>{
     const result = await insertIntoDatabase(req.body)
@@ -32,6 +33,34 @@ const getUserByUsername = async (req,res)=>{
     }
     res.send(result)
 }
+
+const loginUser = async (req,res)=>{
+    const {username,password} = req.body
+    const user = await getSingleUserByUsername(username)
+
+    if(!user)
+    {
+        const error = new Error
+        error.status = 404
+        error.message = "No user found with that username"
+        throw error
+    }
+
+    if(username === user.username && password === user.password)
+    {
+        jwt.sign(user.id, process.env.AUTHKEY, {expiresIn: '1month'}, (err, token)=>{
+            if(err) throw err
+            res.send(token)
+        })
+    }
+    else
+    {
+        const error = new Error
+        error.status = 401
+        error.message = "Wrong password"
+    }
+}
+
 
 const getUsers = async (req,res)=>{
     const result = await getAllUsers()
@@ -68,6 +97,7 @@ const deleteUser = async (req,res)=>{
 }
 
 module.exports = {
+    loginUser,
     createUser,
     getUserByID,
     getUserByUsername,

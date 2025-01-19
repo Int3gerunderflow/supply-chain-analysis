@@ -9,6 +9,10 @@ const Routes = () => {
     //routes for all users
     const publicRoutes = [
         {
+            path: "/",
+            element: <h1>Homepage</h1>
+        },
+        {
             path: "/map",
             element: <h1>Map page</h1>
         },

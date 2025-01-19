@@ -31,6 +31,7 @@ const AuthProvider = ({ children }) => {
   );
 
   // Provide the authentication context to the children components
+  // the token and setToken method is passed in as the contextValue
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
