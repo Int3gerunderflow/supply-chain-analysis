@@ -44,15 +44,15 @@ const makeNewPost = async (params) => {
 
     /*for an input adjacency list JSON object the JSONstring should look like this in the end:
 
-    adjacencyList: 
-    {
-        "1":[15],
-        "14":[3,574,75,6,24]
-    }
+        adjacencyList: 
+        {
+            "1":[15],
+            "14":[3,574,75,6,24]
+        }
 
-    vvvv  output result  vvvvv
+        vvvv  output result  vvvvv
 
-    JSON_ARRAY(JSON_OBJECT('1',JSON_ARRAY(15)),JSON_OBJECT('14',JSON_ARRAY(3,574,75,6,24)))
+        JSON_ARRAY(JSON_OBJECT('1',JSON_ARRAY(15)),JSON_OBJECT('14',JSON_ARRAY(3,574,75,6,24)))
     */
 
     try {
@@ -64,4 +64,16 @@ const makeNewPost = async (params) => {
     } 
 }
 
-module.exports = { getSupplyChainPostDetails, makeNewPost }
+const makeNewSupplier = async (params) => {
+    const {postID, name, description, latitude, longitude} = params
+    try {
+        const [result, fields] = await connection.promise().query(`INSERT INTO suppliers (postID, name, description, latitude, longitude) 
+        VALUES ('${postID}', '${name}', '${description}', ${latitude}, ${longitude});`);
+        return result
+    } catch (error) {
+        return error
+    }
+}
+
+
+module.exports = { getSupplyChainPostDetails, makeNewPost, makeNewSupplier }
