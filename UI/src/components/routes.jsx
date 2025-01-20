@@ -14,7 +14,10 @@ const Routes = () => {
         },
         {
             path: "/map",
-            element: <h1>Map page</h1>
+            element: <div>
+                <h1>Map page</h1>
+                <a href="/login">Login</a>
+            </div>
         },
         {
             path: "/login",

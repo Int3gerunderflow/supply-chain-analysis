@@ -5,7 +5,7 @@ export const ProtectedRoute = () => {
     const {token} = useAuth();
 
     if(!token) {
-        return <Navigate to="/login" />
+        return <Navigate to="/map" />
     }
     else{
         return <Outlet/>

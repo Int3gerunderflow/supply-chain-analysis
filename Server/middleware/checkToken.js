@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken')
  * Middleware to check if the provided request has the correct token to access this route
  */
 const checkToken = (req, res, next) => {
-    console.log("Checking token")
     const header = req.headers['authorization'];
 
     if(typeof header !== 'undefined')

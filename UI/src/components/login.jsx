@@ -1,17 +1,25 @@
 import React, { useState } from 'react'
+import axios from 'axios'
+import { useAuth } from './auth'
+import { useNavigate } from 'react-router-dom'
 
 function LoginPage(){
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [welcome, setWelcome] = useState('')
 
+    const { setToken } = useAuth()
+    const navigate = useNavigate()
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await fetch(`http://localhost:8000/users/byName/${username}`,{
-                mode: 'cors'
-            }).then(result => result.json())
-            console.log(response)
+            const response = await axios.post(`http://localhost:8000/users/login`,{
+                username,
+                password
+            })
+            setToken(response.data)
+            navigate("/map", { replace: true })
         } catch (error) {
             console.log(error)
         }

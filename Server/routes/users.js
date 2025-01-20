@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController')
-const checkToken = require('../middleware/checkToken')
+const checkToken = require('../middleware/checkToken')  //middleware to guard protected routes
 
 //GET ONE SINGLE USER BY THEIR ID
-router.get('/byID/:id', userController.getUserByID)
+router.get('/byID/:id', checkToken, userController.getUserByID)
 
 //GET ONE SINGLE USER BY THEIR USERNAME
 router.get('/byName/:username', userController.getUserByUsername)

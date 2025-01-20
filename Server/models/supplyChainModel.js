@@ -91,7 +91,7 @@ const deletePostByID = async (postID) => {
 
 const deleteSupplierByID = async (supplyID) => {
     try {
-        const [result, fields] = await connection.promise().query(`DELETE FROM suppliers WHERE supplyID=${postID};`);
+        const [result, fields] = await connection.promise().query(`DELETE FROM suppliers WHERE supplyID=${supplyID};`);
         return result
     } catch (error) {
         return error.code

@@ -5,7 +5,19 @@ const jwt = require('jsonwebtoken')
 
 const createUser = async (req,res)=>{
     const result = await insertIntoDatabase(req.body)
-    res.send(result)
+    const newlyMadeUser = await getSingleUserByUsername(req.body.username)
+
+    const payload = {
+        id: newlyMadeUser.id,
+        pfp: newlyMadeUser.profilePicLocation
+    }
+
+    jwt.sign(payload, process.env.AUTHKEY, {expiresIn: "1h"}, (err, token)=>{
+        if(err) throw err
+        res.send(token)
+    })
+
+    
 }
 
 const getUserByID = async (req,res)=>{
@@ -52,7 +64,7 @@ const loginUser = async (req,res)=>{
             id: user.id,
             pfp: user.profilePicLocation
         }
-        jwt.sign(payload, process.env.AUTHKEY, {expiresIn: "1h"}, (err, token)=>{
+        jwt.sign(payload, process.env.AUTHKEY, {expiresIn: "30d"}, (err, token)=>{
             if(err) throw err
             res.send(token)
         })
