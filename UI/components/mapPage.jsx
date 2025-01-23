@@ -75,3 +75,7 @@ function MapPage() {
 }
 
 export default MapPage
+
+/* global document */
+// const container = document.body.appendChild(document.createElement('div'));
+// createRoot(container).render(<Root />);

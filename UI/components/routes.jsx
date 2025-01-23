@@ -3,6 +3,7 @@ import { useAuth } from "./auth";
 import { ProtectedRoute } from "./protectedRoutes";
 import LoginPage from "./login";
 import MapPage from "./mapPage";
+import React from 'react'
 
 const Routes = () => {
     const { token } = useAuth();
@@ -11,14 +12,11 @@ const Routes = () => {
     const publicRoutes = [
         {
             path: "/",
-            element: <MapPage/>
+            element: <h1>Home page?</h1>
         },
         {
             path: "/map",
-            element: <div>
-                <h1>Map page</h1>
-                <a href="/login">Login</a>
-            </div>
+            element: <MapPage/>
         },
         {
             path: "/login",
