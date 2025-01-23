@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth } from "./auth";
 import { ProtectedRoute } from "./protectedRoutes";
 import LoginPage from "./login";
+import MapPage from "./mapPage";
 
 const Routes = () => {
     const { token } = useAuth();
@@ -10,7 +11,7 @@ const Routes = () => {
     const publicRoutes = [
         {
             path: "/",
-            element: <h1>Homepage</h1>
+            element: <MapPage/>
         },
         {
             path: "/map",
