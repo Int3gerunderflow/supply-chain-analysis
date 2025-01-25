@@ -1,7 +1,8 @@
 const { 
     getSupplyChainPostDetails,
     getSupplierByID,
-    makeNewPost,
+    makeNewBlankPost,
+    updatePostInDatabase,
     makeNewSupplier,
     deletePostByID,
     deleteSupplierByID
@@ -33,13 +34,14 @@ const getSupplierDetails = async (req,res) => {
     res.send(result)
 }
 
-const createNewPost = async (req,res) => {
-    const result = await makeNewPost(req.body)
+const createNewBlankPost = async (req,res) => {
+    const result = await makeNewBlankPost(req.body)
     res.send(result)
 }
 
-const createNewSupplier = async (req,res) => {
-    const result = await makeNewSupplier(req.body)
+const updatePost = async (req,res) => {
+    const params = { postID:req.params.postID, ...req.body }
+    const result = await updatePostInDatabase(params)
     res.send(result)
 }
 
@@ -55,6 +57,11 @@ const deletePost = async (req,res) => {
     res.send(result)
 }
 
+const createNewSupplier = async (req,res) => {
+    const result = await makeNewSupplier(req.body)
+    res.send(result)
+}
+
 const deleteSupplier = async (req,res) => {
     const result = await deleteSupplierByID(req.params.supplyID)
     if(result.affectedRows < 1)
@@ -67,4 +74,12 @@ const deleteSupplier = async (req,res) => {
     res.send(result)
 }
 
-module.exports = { getPostDetails, getSupplierDetails, createNewPost, createNewSupplier, deletePost, deleteSupplier }
+module.exports = { 
+    getPostDetails, 
+    getSupplierDetails, 
+    createNewBlankPost,
+    updatePost, 
+    deletePost, 
+    createNewSupplier,
+    deleteSupplier
+ }

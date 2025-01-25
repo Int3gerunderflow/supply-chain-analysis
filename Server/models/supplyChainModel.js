@@ -15,8 +15,21 @@ const getSupplyChainPostDetails = async (postID) => {
     return result[0]
 }
 
-const makeNewPost = async (params) => {
-    const {userID, adjacencyList, product, company, description} = params
+const makeNewBlankPost = async (params) => {
+    const {userID, product, company, description} = params
+
+    try {
+        const [result, fields] = await connection.promise().query(`INSERT INTO posts (userID, adjacencyList, product, company, description) 
+            VALUES ('${userID}', JSON_ARRAY(), '${product}', '${company}', '${description}');`);
+        return result
+    } catch (error) {
+        console.log(error)
+        return error.code
+    } 
+}
+
+const updatePostInDatabase = async (params) => {
+    const {postID, userID, adjacencyList, product, company, description} = params
 
     let JSONstring = 'JSON_ARRAY('
     //convert the adjacencyList JSON into the appropriate SQL query
@@ -39,7 +52,11 @@ const makeNewPost = async (params) => {
         
         JSONstring += ')),'
     }
-    JSONstring = JSONstring.substring(0,JSONstring.length-1)
+
+    if(Object.keys(adjacencyList).length > 0)
+    {
+        JSONstring = JSONstring.substring(0,JSONstring.length-1)
+    }
     JSONstring += ')'
 
     /*for an input adjacency list JSON object the JSONstring should look like this in the end:
@@ -56,10 +73,12 @@ const makeNewPost = async (params) => {
     */
 
     try {
-        const [result, fields] = await connection.promise().query(`INSERT INTO posts (userID, adjacencyList, product, company, description) 
-            VALUES ('${userID}', ${JSONstring}, '${product}', '${company}', '${description}');`);
+        const [result, fields] = await connection.promise().query(`UPDATE posts SET  
+            userID = ${userID}, adjacencyList = ${JSONstring}, product = '${product}', company = '${company}', description = '${description}'
+            WHERE postID = ${postID};`);
         return result
     } catch (error) {
+        console.log(error)
         return error.code
     } 
 }
@@ -97,4 +116,11 @@ const deleteSupplierByID = async (supplyID) => {
         return error.code
     } 
 }
-module.exports = { getSupplyChainPostDetails, getSupplierByID, makeNewPost, makeNewSupplier, deletePostByID, deleteSupplierByID }
+module.exports = { 
+    getSupplyChainPostDetails, 
+    getSupplierByID,
+    makeNewBlankPost, 
+    updatePostInDatabase, 
+    makeNewSupplier, 
+    deletePostByID, 
+    deleteSupplierByID }
