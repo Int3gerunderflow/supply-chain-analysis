@@ -4,9 +4,10 @@ const MapDataContext = createContext();
 
 const MapDataProvider = ({ children }) => {
   // useState to store the authentication token
-  const [adjacencyList, setadjList_] = useState({});
+  const [adjacencyList, setadjList_] = useState(JSON.parse(localStorage.getItem("adjList")));
 
   const setadjList = (object) => {
+    localStorage.setItem("adjList",JSON.stringify(object))
     setadjList_(object);
   };
 

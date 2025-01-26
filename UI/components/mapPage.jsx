@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { getMapDataContext } from './mapData';
-import { useAuth } from './auth';
+import axios from 'axios';
 import {Map, NavigationControl, Popup, useControl} from 'react-map-gl/maplibre';
 import {GeoJsonLayer, ScatterplotLayer, ArcLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
@@ -27,41 +27,51 @@ function DeckGLOverlay(props) {
   return null;
 }
 
+
+
 function MapPage() {
   const {adjacencyList,setadjList} = getMapDataContext()
-  console.log(adjacencyList)
   const [selected, setSelected] = useState(null);
 
+  //create a new data object that holds every supplier in this user's post
+  const [supplyData,setSupplyData] = useState([])
+
+  const getAllSuppliers = async (adjList) => {
+    const suppliersArray = []
+    for(const element of adjList)
+    {
+      await axios.get(`http://localhost:8000/posts/supplier/${Number(Object.keys(element)[0])}`)
+         .then((reply)=>suppliersArray.push(reply.data))
+    }
+    return suppliersArray
+  }
+
+  useEffect(() => {
+    const getSupplierArray = async () => {
+      const response = await getAllSuppliers(adjacencyList);
+      setSupplyData(response)
+    };
+    getSupplierArray();
+  }, []);
+
+
+  //putting in the layers on top of hte map
   const layers = [
-    new GeoJsonLayer({
-      id: 'airports',
-      data: AIR_PORTS,
-      // Styles
-      filled: true,
-      pointRadiusMinPixels: 2,
-      pointRadiusScale: 2000,
-      getPointRadius: f => 11 - f.properties.scalerank,
-      getFillColor: [200, 0, 80, 180],
-      // Interactive props
-      pickable: true,
-      autoHighlight: true,
-      onClick: info => setSelected(info.object)
-      // beforeId: 'watername_ocean' // In interleaved mode, render the layer under map labels
-    }),
     new ScatterplotLayer({
       id: "scatterplot",
-      data: adjacencyList,
+      // data: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/bart-stations.json',
+      data: supplyData,
 
       getPosition: (d) => {
-        console.log(d)
-        // const coordinates = [d.latitude,d.longitude]
-        return d.coordinates
+        const coordinates = [d.longitude,d.latitude]
+        console.log(coordinates)
+        return coordinates
       },
-      getRadius: 12,
+      getRadius: 25,
       getFillColor: [255, 140, 0,180],
       getLineColor: [0, 0, 0],
       getLineWidth: 10,
-      radiusScale: 1000,
+      radiusScale: 5000,
       pickable: true
     }),
     new ArcLayer({
