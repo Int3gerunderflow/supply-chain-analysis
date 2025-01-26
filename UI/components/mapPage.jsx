@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
+import { getMapDataContext } from './mapData';
 import {Map, NavigationControl, Popup, useControl} from 'react-map-gl/maplibre';
 import {GeoJsonLayer, ArcLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import 'maplibre-gl/dist/maplibre-gl.css';
+
 
 // source: Natural Earth http://www.naturalearthdata.com/ via geojson.xyz
 const AIR_PORTS =
@@ -24,6 +26,8 @@ function DeckGLOverlay(props) {
 }
 
 function MapPage() {
+  const {adjacencyList,setadjList} = getMapDataContext()
+  console.log(adjacencyList)
   const [selected, setSelected] = useState(null);
 
   const layers = [
@@ -66,6 +70,7 @@ function MapPage() {
           latitude={selected.geometry.coordinates[1]}
         >
           {selected.properties.name} ({selected.properties.abbrev})
+          <p>{selected.properties.wikipedia}</p>
         </Popup>
       )}
       <DeckGLOverlay layers={layers} /* interleaved*/ />

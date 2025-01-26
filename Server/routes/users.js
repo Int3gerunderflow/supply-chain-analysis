@@ -7,7 +7,7 @@ const checkToken = require('../middleware/checkToken')  //middleware to guard pr
 router.get('/byID/:id', checkToken, userController.getUserByID)
 
 //GET ONE SINGLE USER BY THEIR USERNAME
-router.get('/byName/:username', userController.getUserByUsername)
+router.get('/byName/:username', checkToken, userController.getUserByUsername)
 
 //ATTEMPT USER LOGIN
 router.post('/login', userController.loginUser)
@@ -19,10 +19,10 @@ router.get('/', userController.getUsers)
 router.post('/', userController.createUser)
 
 //UPDATE AN EXISTING USER
-router.put('/:id', userController.updateUser)
+router.put('/:id', checkToken, userController.updateUser)
 
 //DELETE AN USER
-router.delete('/:id', userController.deleteUser)
+router.delete('/:id', checkToken, userController.deleteUser)
 
 
 module.exports = router;
