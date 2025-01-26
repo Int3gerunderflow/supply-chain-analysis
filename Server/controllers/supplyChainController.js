@@ -1,4 +1,5 @@
 const { 
+    getAllPostsAssociatedByUserID,
     getSupplyChainPostDetails,
     getSupplierByID,
     makeNewBlankPost,
@@ -7,6 +8,12 @@ const {
     deletePostByID,
     deleteSupplierByID
  } = require("../models/supplyChainModel");
+
+const getUsersPosts = async (req,res) => {
+    const userID = req.params.userID
+    const result = await getAllPostsAssociatedByUserID(userID)
+    res.send(result)
+}
 
 const getPostDetails = async (req,res) => {
     const postID = req.params.postID;
@@ -75,6 +82,7 @@ const deleteSupplier = async (req,res) => {
 }
 
 module.exports = { 
+    getUsersPosts,
     getPostDetails, 
     getSupplierDetails, 
     createNewBlankPost,

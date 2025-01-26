@@ -3,6 +3,7 @@ const router = express.Router();
 const supplyChainController = require('../controllers/supplyChainController')
 
 //GET ONE POST BY ITS ID
+
 router.get('/:postID', supplyChainController.getPostDetails)
 
 router.get('/supplier/:supplyID', supplyChainController.getSupplierDetails)
