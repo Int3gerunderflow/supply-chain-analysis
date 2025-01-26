@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useAuth } from './auth'
+import { useNavigate } from 'react-router-dom'
+import { getMapDataContext } from './mapData';
 
 function UserHomePage(){
     const [userPosts, setUserPosts] = useState([])
@@ -27,9 +29,16 @@ function UserHomePage(){
 
 }
 
-const PostDescriptionCard = ({product, company})=>{
+const PostDescriptionCard = ({adjacencyList, product, company})=>{
+    const navigate = useNavigate()
+    const { setadjList } = getMapDataContext();
+
+    const handleClick = () => {
+        setadjList(adjacencyList)
+        navigate("/map", { replace: true })
+    }
     return(
-        <div style={{border: 2}}>
+        <div onClick={handleClick}>
             <h3>{product}</h3>
             <h4>{company}</h4>
         </div>

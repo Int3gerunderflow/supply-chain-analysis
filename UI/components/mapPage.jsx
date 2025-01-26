@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import { getMapDataContext } from './mapData';
+import { useAuth } from './auth';
 import {Map, NavigationControl, Popup, useControl} from 'react-map-gl/maplibre';
-import {GeoJsonLayer, ArcLayer} from 'deck.gl';
+import {GeoJsonLayer, ScatterplotLayer, ArcLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import 'maplibre-gl/dist/maplibre-gl.css';
+
 
 
 // source: Natural Earth http://www.naturalearthdata.com/ via geojson.xyz
@@ -45,6 +47,22 @@ function MapPage() {
       autoHighlight: true,
       onClick: info => setSelected(info.object)
       // beforeId: 'watername_ocean' // In interleaved mode, render the layer under map labels
+    }),
+    new ScatterplotLayer({
+      id: "scatterplot",
+      data: adjacencyList,
+
+      getPosition: (d) => {
+        console.log(d)
+        // const coordinates = [d.latitude,d.longitude]
+        return d.coordinates
+      },
+      getRadius: 12,
+      getFillColor: [255, 140, 0,180],
+      getLineColor: [0, 0, 0],
+      getLineWidth: 10,
+      radiusScale: 1000,
+      pickable: true
     }),
     new ArcLayer({
       id: 'arcs',
