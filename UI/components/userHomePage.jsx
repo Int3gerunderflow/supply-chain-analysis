@@ -29,12 +29,12 @@ function UserHomePage(){
 
 }
 
-const PostDescriptionCard = ({adjacencyList, product, company})=>{
+const PostDescriptionCard = ({adjacencyList, product, company, finalAssembly})=>{
     const navigate = useNavigate()
-    const { setadjList } = getMapDataContext();
+    const { setGraphData } = getMapDataContext();
 
     const handleClick = () => {
-        setadjList(adjacencyList)
+        setGraphData({adjacencyList, finalAssembly})
         navigate("/map", { replace: true })
     }
     return(

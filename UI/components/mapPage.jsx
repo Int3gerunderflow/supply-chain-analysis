@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react';
 import { getMapDataContext } from './mapData';
 import axios from 'axios';
 import {Map, NavigationControl, Popup, useControl} from 'react-map-gl/maplibre';
-import {GeoJsonLayer, ScatterplotLayer, ArcLayer} from 'deck.gl';
+import {ScatterplotLayer, ArcLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -30,11 +30,12 @@ function DeckGLOverlay(props) {
 
 
 function MapPage() {
-  const {adjacencyList,setadjList} = getMapDataContext()
+  const {graphData,setadjList} = getMapDataContext()
   const [selected, setSelected] = useState(null);
 
   //create a new data object that holds every supplier in this user's post
-  const [supplyData,setSupplyData] = useState([])
+  const [supplyData,setSupplyData] = useState([]) //list of every supplier
+  const [finalAssemblyLocation, setFinalAssem] = useState(0)
 
   const getAllSuppliers = async (adjList) => {
     const suppliersArray = []
@@ -47,14 +48,14 @@ function MapPage() {
   }
 
   useEffect(() => {
-    const getSupplierArray = async () => {
-      const response = await getAllSuppliers(adjacencyList);
-      setSupplyData(response)
+    const getSupplierInfo = async () => {
+      const adjList = await getAllSuppliers(graphData.adjacencyList);
+      setFinalAssem(graphData.finalAssembly)
+      setSupplyData(adjList)
     };
-    getSupplierArray();
+    getSupplierInfo();
   }, []);
-
-
+  
   //putting in the layers on top of hte map
   const layers = [
     new ScatterplotLayer({
@@ -70,9 +71,11 @@ function MapPage() {
       getRadius: 25,
       getFillColor: [255, 140, 0,180],
       getLineColor: [0, 0, 0],
+      highlightColor: [200,0,80,128],
       getLineWidth: 10,
       radiusScale: 5000,
-      pickable: true
+      pickable: true,
+      autoHighlight: true
     }),
     new ArcLayer({
       id: 'arcs',

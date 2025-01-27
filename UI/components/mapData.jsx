@@ -4,16 +4,16 @@ const MapDataContext = createContext();
 
 const MapDataProvider = ({ children }) => {
   // useState to store the authentication token
-  const [adjacencyList, setadjList_] = useState(JSON.parse(localStorage.getItem("adjList")));
+  const [graphData, setGraphData_] = useState(JSON.parse(localStorage.getItem("adjList")));
 
-  const setadjList = (object) => {
+  const setGraphData = (object) => {
     localStorage.setItem("adjList",JSON.stringify(object))
-    setadjList_(object);
+    setGraphData_(object);
   };
 
   const contextValue = useMemo(()=>(
-    {adjacencyList, setadjList}
-  ), [adjacencyList])
+    {graphData, setGraphData}
+  ), [graphData])
 
   // Provide the authentication context to the children components
   // the token and setToken method is passed in as the contextValue
