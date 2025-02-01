@@ -56,12 +56,17 @@ function MapPage() {
 
   const populateExpandedAdjList = () => {
     const resultArray = []
+    const seenVerticies = new Set() //create a hashset to keep track of which vertices we have already seen to avoid duplicates
     for(const entry of graphData.adjacencyList)
     {
       const vertex = Number(Object.keys(entry)[0])
       const neighbors = Object.values(entry)[0]
       for(let n of neighbors)
       {
+        if(seenVerticies.has(n))
+        {
+          continue;
+        }
         const srcLongitude = supplierHashMap.get(vertex).longitude
         const srcLatitude = supplierHashMap.get(vertex).latitude
         const nLongitude = supplierHashMap.get(n).longitude
@@ -71,6 +76,7 @@ function MapPage() {
           "target": [nLongitude, nLatitude]
         })
       }
+      seenVerticies.add(vertex)
     }
     console.log(resultArray)
     setExpAdjList(resultArray)
