@@ -50,13 +50,15 @@ function MapPage() {
   useEffect(() => {
     const getSupplierInfo = async () => {
       const adjList = await getAllSuppliers(graphData.adjacencyList);
-      setFinalAssem(graphData.finalAssembly)
+      //Go  through the adjacency list and find the supplier with the ID of the final assembly location
+      const finalAssem = adjList.filter((supplier)=>{return supplier.supplyID === graphData.finalAssembly})[0]
+      setFinalAssem(finalAssem)
       setSupplyData(adjList)
     };
     getSupplierInfo();
   }, []);
   
-  //putting in the layers on top of hte map
+  //putting in the layers on top of the map
   const layers = [
     new ScatterplotLayer({
       id: "scatterplot",
@@ -65,7 +67,6 @@ function MapPage() {
 
       getPosition: (d) => {
         const coordinates = [d.longitude,d.latitude]
-        console.log(coordinates)
         return coordinates
       },
       getRadius: 25,
@@ -79,19 +80,20 @@ function MapPage() {
     }),
     new ArcLayer({
       id: 'arcs',
-      data: AIR_PORTS,
-      dataTransform: d => d.features.filter(f => f.properties.scalerank < 4),
+      data: supplyData,
+      // dataTransform: d => d.features.filter(f => f.properties.scalerank < 4),
       // Styles
-      getSourcePosition: f => [-0.4531566, 51.4709959], // London
-      getTargetPosition: f => f.geometry.coordinates,
+      getSourcePosition: [finalAssemblyLocation.longitude,finalAssemblyLocation.latitude], // Wherever the final location is
+      getTargetPosition: f => [f.longitude,f.latitude],
       getSourceColor: [0, 128, 200],
       getTargetColor: [200, 0, 80],
-      getWidth: 1
+      getWidth: 1,
+      getHeight: 0.5,
     })
   ];
 
   return (
-    <Map initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE}>
+    <Map initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false}>
       {selected && (
         <Popup
           key={selected.properties.name}
