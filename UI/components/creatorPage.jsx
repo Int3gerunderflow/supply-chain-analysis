@@ -2,9 +2,10 @@ import React, {useState,useEffect} from 'react';
 import { getMapDataContext } from './mapData';
 import axios from 'axios';
 import {Map as MapLibreMap, NavigationControl, Popup, useControl} from 'react-map-gl/maplibre';
-import {ScatterplotLayer, ArcLayer} from 'deck.gl';
+import {ScatterplotLayer, PathLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import './creatorPage.css';
 
 
 
@@ -13,7 +14,7 @@ const INITIAL_VIEW_STATE = {
   longitude: 0.45,
   zoom: 4,
   bearing: 0,
-  pitch: 30
+  pitch: 0
 };
 
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
@@ -25,7 +26,7 @@ function DeckGLOverlay(props) {
 
 
 
-function MapPage() {
+function CreatorPage() {
   const {graphData,setsuppData} = getMapDataContext()
   const [selected, setSelected] = useState(null);
   const supplierHashMap = new Map();
@@ -50,6 +51,7 @@ function MapPage() {
     return suppliersArray
   }
 
+  //method to convert the adjacencyList to an array of sources and targets so that deck.gl can properly visualize the data
   const populateExpandedAdjList = () => {
     const resultArray = []
     const seenVerticies = new Set() //create a hashset to keep track of which vertices we have already seen to avoid duplicates
@@ -88,6 +90,17 @@ function MapPage() {
     };
     getSupplierInfo();
   }, []);
+
+  //toolbar for the user to select what they want to add on the map
+  const ToolBar = () => {
+    return (
+        <div className='tool'>
+            <img src='../assets/connection.png'/>
+            <img src='../assets/industry-alt.png'/>
+            <img src='../assets/cross.png'/>
+        </div>
+    )
+  }
   
   //putting in the layers on top of the map
   const layers = [
@@ -110,21 +123,20 @@ function MapPage() {
       autoHighlight: true,
       onClick: info => setSelected(info.object)
     }),
-    new ArcLayer({
-      id: 'arcs',
-      data: expandedAdjList,
-      // dataTransform: d => d.features.filter(f => f.properties.scalerank < 4),
-      // Styles
-      getSourcePosition: f => [f.source[0], f.source[1]], // Wherever the final location is
-      getTargetPosition: f => [f.target[0], f.target[1]],
-      getSourceColor: [255, 140, 0],
-      getTargetColor: [255, 84, 175],
-      getWidth: 1,
-      getHeight: 0.5,
+    new PathLayer({
+        id: '2dpaths',
+        data: expandedAdjList,
+        getColor:[234, 60, 152],
+        getWidth: 4,
+        widthUnits: 'pixels',
+        getPath: d => [[d.source[0], d.source[1]],[d.target[0], d.target[1]]],
+        pickable: true
     })
   ];
 
   return (
+    <>
+    <ToolBar/>
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false}>
       {selected && (
         <Popup
@@ -140,11 +152,8 @@ function MapPage() {
       <DeckGLOverlay layers={layers} /* interleaved*/ />
       <NavigationControl position="top-right" />
     </MapLibreMap>
+    </>
   );
 }
 
-export default MapPage
-
-/* global document */
-// const container = document.body.appendChild(document.createElement('div'));
-// createRoot(container).render(<Root />);
+export default CreatorPage

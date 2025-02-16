@@ -4,6 +4,7 @@ import { ProtectedRoute } from "./protectedRoutes";
 import LoginPage from "./login";
 import MapPage from "./mapPage";
 import UserHomePage from "./userHomePage";
+import CreatorPage from "./creatorPage";
 import React from 'react'
 
 function Routes() {
@@ -33,6 +34,10 @@ function Routes() {
             {
                 path:"/profile",
                 element:<UserHomePage/>
+            },
+            {
+                path:"/create",
+                element:<CreatorPage/>
             },
         ]
     }]
