@@ -91,15 +91,35 @@ function CreatorPage() {
     getSupplierInfo();
   }, []);
 
+  //state representing which tool has been selected
+  //
+  const [action, setAction] = useState("none")
+  const [addSupplierInfo, setAddSupplierInfo] = useState({})
+
+  const toolAction = {
+    addSupplier: "addSupplier",
+    addRelation: "addRelation",
+    delete: "delete",
+    none: "none"
+  }
+
   //toolbar for the user to select what they want to add on the map
   const ToolBar = () => {
     return (
         <div className='tool'>
-            <img src='../assets/connection.png'/>
-            <img src='../assets/industry-alt.png'/>
-            <img src='../assets/cross.png'/>
+            <img src='../assets/industry-alt.png' onClick={()=>action===toolAction.addSupplier ? setAction(toolAction.none) : setAction(toolAction.addSupplier)}/>
+            <img src='../assets/connection.png' onClick={()=>action===toolAction.addRelation ? setAction(toolAction.none) : setAction(toolAction.addRelation)}/>
+            <img src='../assets/cross.png' onClick={()=>action===toolAction.delete ? setAction(toolAction.none) : setAction(toolAction.delete)}/>
+            <p>{action}</p>
         </div>
     )
+  }
+
+  const handleMapClick = (e) => {
+    if(action === toolAction.addSupplier)
+    {
+
+    }
   }
   
   //putting in the layers on top of the map
@@ -137,7 +157,7 @@ function CreatorPage() {
   return (
     <>
     <ToolBar/>
-    <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false}>
+    <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClick(e)}>
       {selected && (
         <Popup
           key={selected.supplyID}

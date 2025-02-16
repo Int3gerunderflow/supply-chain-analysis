@@ -15,14 +15,12 @@ const MapDataProvider = ({ children }) => {
     {graphData, setGraphData}
   ), [graphData])
 
-  // Provide the authentication context to the children components
-  // the token and setToken method is passed in as the contextValue
   return (
     <MapDataContext.Provider value={contextValue}>{children}</MapDataContext.Provider>
   );
 };
 
-//function to get the authcontext
+//function to get the mapContext
 export const getMapDataContext = () => {
   return useContext(MapDataContext);
 };
