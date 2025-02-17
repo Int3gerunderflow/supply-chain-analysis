@@ -92,8 +92,10 @@ function CreatorPage() {
   }, []);
 
   //state representing which tool has been selected
-  //
   const [action, setAction] = useState("none")
+  const [factoryColor, setFactoryColor] = useState('rgb(255,255,255')
+  const [relationColor, setRelationColor] = useState('rgb(255,255,255')
+  const [deleteColor, setDeleteColor] = useState('rgb(255,255,255')
   const [addSupplierInfo, setAddSupplierInfo] = useState({})
 
   const toolAction = {
@@ -103,19 +105,85 @@ function CreatorPage() {
     none: "none"
   }
 
+  const setToolStatus = (tool) => {
+    if(tool === toolAction.addSupplier)
+    {
+        if(action === toolAction.addSupplier)
+        {
+            setAction(toolAction.none)
+            setFactoryColor('rgb(255,255,255)')
+            setRelationColor('rgb(255,255,255)')
+            setDeleteColor('rgb(255,255,255)')
+        }
+        else
+        {
+            setAction(toolAction.addSupplier)
+            setFactoryColor('rgb(179, 179, 179)')
+            setRelationColor('rgb(255,255,255)')
+            setDeleteColor('rgb(255,255,255)')
+
+        }
+    }
+    if(tool === toolAction.addRelation)
+    {
+        if(action === toolAction.addRelation)
+        {
+            setAction(toolAction.none)
+            setFactoryColor('rgb(255,255,255)')
+            setRelationColor('rgb(255,255,255)')
+            setDeleteColor('rgb(255,255,255)')
+        }
+        else
+        {
+            setAction(toolAction.addRelation)
+            setFactoryColor('rgb(255, 255, 255)')
+            setRelationColor('rgb(179,179,179)')
+            setDeleteColor('rgb(255,255,255)')
+        }
+    }
+    if(tool === toolAction.delete)
+        {
+            if(action === toolAction.delete)
+            {
+                setAction(toolAction.none)
+                setFactoryColor('rgb(255,255,255)')
+                setRelationColor('rgb(255,255,255)')
+                setDeleteColor('rgb(255,255,255)')
+            }
+            else
+            {
+                setAction(toolAction.delete)
+                setFactoryColor('rgb(255,255,255)')
+                setRelationColor('rgb(255,255,255)')
+                setDeleteColor('rgb(179, 179, 179)')
+            }
+        }
+  }
+
   //toolbar for the user to select what they want to add on the map
   const ToolBar = () => {
     return (
         <div className='tool'>
-            <img src='../assets/industry-alt.png' onClick={()=>action===toolAction.addSupplier ? setAction(toolAction.none) : setAction(toolAction.addSupplier)}/>
-            <img src='../assets/connection.png' onClick={()=>action===toolAction.addRelation ? setAction(toolAction.none) : setAction(toolAction.addRelation)}/>
-            <img src='../assets/cross.png' onClick={()=>action===toolAction.delete ? setAction(toolAction.none) : setAction(toolAction.delete)}/>
+            <img src='../assets/industry-alt.png' 
+                onClick={()=>setToolStatus(toolAction.addSupplier)}
+                onMouseEnter={(e)=>e.target.style.backgroundColor = 'rgb(179, 179, 179)'}
+                onMouseLeave={(e)=>e.target.style.backgroundColor = factoryColor}/>
+            <img src='../assets/connection.png' 
+                onClick={()=>setToolStatus(toolAction.addRelation)}
+                onMouseEnter={(e)=>e.target.style.backgroundColor = 'rgb(179, 179, 179)'}
+                onMouseLeave={(e)=>e.target.style.backgroundColor = relationColor}/>
+            <img src='../assets/cross.png' 
+                onClick={()=>setToolStatus(toolAction.delete)}
+                onMouseEnter={(e)=>e.target.style.backgroundColor = 'rgb(179, 179, 179)'}
+                onMouseLeave={(e)=>e.target.style.backgroundColor = deleteColor}/>
             <p>{action}</p>
         </div>
     )
   }
 
   const handleMapClick = (e) => {
+    const long = e.lngLat.lng
+    const lat = e.lngLat.lat 
     if(action === toolAction.addSupplier)
     {
 
