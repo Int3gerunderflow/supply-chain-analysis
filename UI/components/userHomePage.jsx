@@ -3,12 +3,14 @@ import axios from 'axios';
 import { useAuth } from './auth'
 import { useNavigate } from 'react-router-dom'
 import { getMapDataContext } from './mapData';
+import { getCreatorDataContext } from './creatorData';
 
 function UserHomePage(){
     const [userPosts, setUserPosts] = useState([])
     const {token} = useAuth();
     const payloadEncoded = token.split('.')[1]
     const payload = JSON.parse(atob(payloadEncoded))
+    
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -18,20 +20,34 @@ function UserHomePage(){
         fetchPosts();
       }, []);
 
+    const { setCreatorData } = getCreatorDataContext();
+    const navigate = useNavigate()
+
+    const makeNewPost = ()=>{
+        const creatorData = {
+            postID: null,
+            adjacencyList: null,
+            finalAssembly: null,
+        }
+        setCreatorData(creatorData);
+        navigate("/create", { replace: true })
+    }
+
     return(
         <React.Fragment>
             <h2>hi</h2>
             {userPosts.map((item)=> {
                 return <PostDescriptionCard key={item.postID} {...item}/>
             })}
+            <button onClick={makeNewPost}>Make new post</button>
         </React.Fragment>
     )
 
 }
 
 const PostDescriptionCard = ({adjacencyList, product, company, finalAssembly})=>{
-    const navigate = useNavigate()
     const { setGraphData } = getMapDataContext();
+    const navigate = useNavigate()
 
     const handleClick = () => {
         setGraphData({adjacencyList, finalAssembly})

@@ -2,8 +2,8 @@ import React, { createContext, useContext, useMemo, useState } from "react";
 
 const MapDataContext = createContext();
 
-const MapDataProvider = ({ children }) => {
-  // useState to store the authentication token
+export const MapDataProvider = ({ children }) => {
+  // useState to store the map data
   const [graphData, setGraphData_] = useState(JSON.parse(localStorage.getItem("adjList")));
 
   const setGraphData = (object) => {
@@ -25,4 +25,4 @@ export const getMapDataContext = () => {
   return useContext(MapDataContext);
 };
 
-export default MapDataProvider;
+export default MapDataProvider

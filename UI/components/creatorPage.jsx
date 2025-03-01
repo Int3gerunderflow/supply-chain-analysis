@@ -1,4 +1,5 @@
 import React, {useState,useEffect} from 'react';
+import { getCreatorDataContext } from './creatorData';
 import { getMapDataContext } from './mapData';
 import { useAuth } from './auth';
 import axios from 'axios';
@@ -29,7 +30,9 @@ function DeckGLOverlay(props) {
 
 
 function CreatorPage() {
-  const {graphData,setsuppData} = getMapDataContext()
+  const {graphData,setGraphData} = getMapDataContext();
+
+  const supplierHashMap = new Map();
 
   //section to get the logged in user's ID
   const {token} = useAuth()
@@ -37,7 +40,6 @@ function CreatorPage() {
   const userID = JSON.parse(atob(payloadEncoded)).id
 
   const [selected, setSelected] = useState(null);
-  const supplierHashMap = new Map();
 
   //create a new data object that holds every supplier in this user's post
   const [supplyData,setSupplyData] = useState([]) //list of every supplier
@@ -58,6 +60,7 @@ function CreatorPage() {
     populateExpandedAdjList();
     return suppliersArray
   }
+
 
   //method to convert the adjacencyList to an array of sources and targets so that deck.gl can properly visualize the data
   const populateExpandedAdjList = () => {
@@ -84,20 +87,20 @@ function CreatorPage() {
       }
       seenVerticies.add(vertex)
     }
-    console.log(resultArray)
     setExpAdjList(resultArray)
   }
 
   useEffect(() => {
-    const getSupplierInfo = async () => {
-      const suppData = await getAllSuppliers(graphData.adjacencyList);
-      //Go  through the adjacency list and find the supplier with the ID of the final assembly location
-      const finalAssem = suppData.filter((supplier)=>{return supplier.supplyID === graphData.finalAssembly})[0]
-      setFinalAssem(finalAssem)
-      setSupplyData(suppData)
-    };
-    getSupplierInfo();
-  }, []);
+      const getSupplierInfo = async () => {
+        const suppData = await getAllSuppliers(graphData.adjacencyList);
+        //Go  through the adjacency list and find the supplier with the ID of the final assembly location
+        const finalAssem = suppData.filter((supplier)=>{return supplier.supplyID === graphData.finalAssembly})[0]
+        setFinalAssem(finalAssem)
+        setSupplyData(suppData)
+      };
+      getSupplierInfo();
+    }, []);
+
 
   //state representing which tool has been selected
   const [action, setAction] = useState("none")
@@ -232,8 +235,10 @@ function CreatorPage() {
 
   return (
     <>
-    {/* <ToolBar/> */}
-    <PostEditor userIDprop={userID}/>
+    <div className='toolContainer'>
+      <ToolBar/>
+    </div>
+    <PostEditor userIDprop={userID} adjListprop={2}/>
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClick(e)}>
       {selected && (
         <Popup

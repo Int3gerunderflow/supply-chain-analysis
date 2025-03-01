@@ -19,7 +19,7 @@ function LoginPage(){
                 password
             })
             setToken(response.data)
-            navigate("/map", { replace: true })
+            navigate("/profile", { replace: true })
         } catch (error) {
             console.log(error)
         }

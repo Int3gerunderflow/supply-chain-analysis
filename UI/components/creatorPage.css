@@ -14,3 +14,8 @@
     padding: 1em;
     border-radius: 6px;
 }
+
+.toolContainer {
+    display: flex;
+    justify-content: center;
+}

@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth } from "./auth";
 import { ProtectedRoute } from "./protectedRoutes";
+import CreatorDataProvider from "./creatorData";
 import LoginPage from "./login";
 import MapPage from "./mapPage";
 import UserHomePage from "./userHomePage";
@@ -29,7 +30,7 @@ function Routes() {
     //routes for only authenticated users
     const authenticatedRoutes = [{
         path: "/",
-        element: <ProtectedRoute />,
+        element: <CreatorDataProvider><ProtectedRoute/></CreatorDataProvider>,
         children: [
             {
                 path:"/profile",
@@ -37,7 +38,7 @@ function Routes() {
             },
             {
                 path:"/create",
-                element:<CreatorPage/>
+                element: <CreatorPage/>
             },
         ]
     }]

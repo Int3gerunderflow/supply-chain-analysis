@@ -1,34 +1,15 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import axios from "axios"
-import './postEditor.css';
 
-function PostEditor({userIDprop, adjListprop}){
-    const userID = userIDprop
-    const [product, setProduct] = useState('')
-    const [company, setCompany] = useState('')
-    const [adjacencyList, setAdjacencyList] = useState('')
-    const [description, setDescription] = useState('')
+function MakeOrEditSupplier({postIDprop, supplierData}){
+    const postID = postIDprop
+    const [name, setName] = useState('')
+    const [latitude, setLatitude] = useState(0)
+    const [longitude, setLongitude] = useState(0)
 
-    const [postOrSave, setPostOrSave]  = useState("Post")
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(postOrSave === "Post")
-        {
-            console.log("making new")
-            try{
-                handleSubmitNewPost(e)
-                // setPostOrSave("Save")
-            }
-            catch(error)
-            {
-                console.log(error)
-            }
-        }
-        if(postOrSave === "Save")
-        {
-            console.log('v')
-        }
     }
 
     const handleSubmitNewPost = async (e) => {
@@ -61,4 +42,4 @@ function PostEditor({userIDprop, adjListprop}){
     )
 }
 
-export default PostEditor
+export default MakeOrEditSupplier
