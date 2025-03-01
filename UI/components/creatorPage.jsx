@@ -1,9 +1,11 @@
 import React, {useState,useEffect} from 'react';
 import { getMapDataContext } from './mapData';
+import { useAuth } from './auth';
 import axios from 'axios';
 import {Map as MapLibreMap, NavigationControl, Popup, useControl} from 'react-map-gl/maplibre';
 import {ScatterplotLayer, PathLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
+import PostEditor from './postEditor';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './creatorPage.css';
 
@@ -28,6 +30,12 @@ function DeckGLOverlay(props) {
 
 function CreatorPage() {
   const {graphData,setsuppData} = getMapDataContext()
+
+  //section to get the logged in user's ID
+  const {token} = useAuth()
+  const payloadEncoded = token.split('.')[1]
+  const userID = JSON.parse(atob(payloadEncoded)).id
+
   const [selected, setSelected] = useState(null);
   const supplierHashMap = new Map();
 
@@ -224,7 +232,8 @@ function CreatorPage() {
 
   return (
     <>
-    <ToolBar/>
+    {/* <ToolBar/> */}
+    <PostEditor userIDprop={userID}/>
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClick(e)}>
       {selected && (
         <Popup
