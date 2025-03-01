@@ -34,7 +34,7 @@ function Routes() {
         children: [
             {
                 path:"/profile",
-                element:<UserHomePage/>
+                element: <UserHomePage/>
             },
             {
                 path:"/create",

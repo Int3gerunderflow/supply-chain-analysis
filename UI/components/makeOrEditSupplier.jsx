@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios"
+import { getCreatorDataContext } from "./creatorData";
+import './makeOrEditSupplier.css'
 
-function MakeOrEditSupplier({postIDprop, supplierData}){
-    const postID = postIDprop
+function MakeOrEditSupplier(){
+    const {creatorData, setCreatorData} = getCreatorDataContext()
+    console.log(creatorData);
     const [name, setName] = useState('')
     const [latitude, setLatitude] = useState(0)
     const [longitude, setLongitude] = useState(0)
@@ -24,20 +27,16 @@ function MakeOrEditSupplier({postIDprop, supplierData}){
     }
 
     return(
-        <article className="postEditor">
+        <article className="supplierEditor">
             <form>
-                <label htmlFor='product'>Product Name</label>
+                <label htmlFor='product'>Supplier Name</label>
                 <input type='text' id='product' onChange={(e)=>setProduct(e.target.value)}/>
             </form>
             <form>
-                <label htmlFor='company'>Company Name</label>
+                <label htmlFor='company'>Description</label>
                 <input type='text' id='company' onChange={(e)=>setCompany(e.target.value)}/>
             </form>
-            <form>
-                <label htmlFor='desc'>Description:</label>
-                <input type='text' id='desc' onChange={(e)=>setDescription(e.target.value)}/>
-            </form>
-            <button type='submit' onClick={handleSubmit}>{postOrSave}</button> 
+            <button type='submit' onClick={handleSubmit}>Save</button> 
         </article>
     )
 }

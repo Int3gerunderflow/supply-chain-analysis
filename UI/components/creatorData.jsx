@@ -2,7 +2,7 @@ import React, { createContext, useContext, useMemo, useState } from "react";
 
 const CreatorDataContext = createContext();
 
-export const CreatorDataProvider = ({ children }) => {
+const CreatorDataProvider = ({ children }) => {
   // useState to store the map data
   const [creatorData, setCreatorData_] = useState(JSON.parse(localStorage.getItem("creatorData")));
 

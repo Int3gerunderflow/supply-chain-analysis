@@ -1,5 +1,4 @@
 import React, {useState,useEffect} from 'react';
-import { getCreatorDataContext } from './creatorData';
 import { getMapDataContext } from './mapData';
 import { useAuth } from './auth';
 import axios from 'axios';
@@ -7,6 +6,7 @@ import {Map as MapLibreMap, NavigationControl, Popup, useControl} from 'react-ma
 import {ScatterplotLayer, PathLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import PostEditor from './postEditor';
+import MakeOrEditSupplier from './makeOrEditSupplier';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './creatorPage.css';
 
@@ -239,6 +239,7 @@ function CreatorPage() {
       <ToolBar/>
     </div>
     <PostEditor userIDprop={userID} adjListprop={2}/>
+    <MakeOrEditSupplier/>
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClick(e)}>
       {selected && (
         <Popup
@@ -247,6 +248,7 @@ function CreatorPage() {
           style={{zIndex: 10}} /* position above deck.gl canvas */
           longitude={selected.longitude}
           latitude={selected.latitude}
+          onClose={()=>setSelected(null)}
         >
           {selected.name} ({selected.description})
         </Popup>
