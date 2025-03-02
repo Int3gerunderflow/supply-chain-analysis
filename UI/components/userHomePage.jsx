@@ -26,7 +26,7 @@ function UserHomePage(){
     const makeNewPost = ()=>{
         const creatorData = {
             postID: null,
-            adjacencyList: null,
+            adjacencyList: [],
             finalAssembly: null,
         }
         setCreatorData(creatorData);

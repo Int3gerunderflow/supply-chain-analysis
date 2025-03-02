@@ -96,7 +96,19 @@ const makeNewSupplier = async (params) => {
         VALUES ('${postID}', '${name}', '${description}', ${latitude}, ${longitude});`);
         return result
     } catch (error) {
-        return error
+        throw error
+    }
+}
+
+const updateSupplierInDatabase = async (params) => {
+    const {supplyID, postID, name, latitude, longitude, description} = params
+    try {
+        const [result, fields] = await connection.promise().query(`UPDATE suppliers 
+            SET postID='${postID}', name='${name}', description='${description}', latitude=${latitude}, longitude=${longitude} 
+            WHERE supplyID=${supplyID};`);
+        return result
+    } catch (error) {
+        throw error
     }
 }
 
@@ -129,5 +141,6 @@ module.exports = {
     makeNewBlankPost, 
     updatePostInDatabase, 
     makeNewSupplier, 
+    updateSupplierInDatabase,
     deletePostByID, 
     deleteSupplierByID }

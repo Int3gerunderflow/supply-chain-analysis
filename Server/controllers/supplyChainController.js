@@ -5,6 +5,7 @@ const {
     makeNewBlankPost,
     updatePostInDatabase,
     makeNewSupplier,
+    updateSupplierInDatabase,
     deletePostByID,
     deleteSupplierByID
  } = require("../models/supplyChainModel");
@@ -65,9 +66,28 @@ const deletePost = async (req,res) => {
 }
 
 const createNewSupplier = async (req,res) => {
-    const result = await makeNewSupplier(req.body)
-    res.send(result)
+    try{
+        const result = await makeNewSupplier(req.body)
+        res.send(result)
+    }
+    catch(error)
+    {
+        res.status(500).send(error.code)
+    }
 }
+
+const updateSupplier = async (req,res) => {
+    const params = { supplyID:req.params.supplyID, ...req.body }
+    try{
+        const result = await updateSupplierInDatabase(params)
+        res.send(result)
+    }
+    catch(error)
+    {
+        console.log(error)
+        res.status(500).send(error.code)
+    }
+}   
 
 const deleteSupplier = async (req,res) => {
     const result = await deleteSupplierByID(req.params.supplyID)
@@ -89,5 +109,6 @@ module.exports = {
     updatePost, 
     deletePost, 
     createNewSupplier,
+    updateSupplier,
     deleteSupplier
  }
