@@ -204,8 +204,7 @@ function CreatorPage() {
 
   //---Supplier creation portion---//
 
-  const [supplierLatitude, setSLatitude] = useState(0)
-  const [supplierLongitude, setSLongitude] = useState(0)
+  const [supplierUpdated, setSupplierUpdated] = useState(0)
   const {creatorData, setCreatorData} = getCreatorDataContext()
   const postID = creatorData.postID
 
@@ -230,38 +229,38 @@ function CreatorPage() {
     )
   }
 
-  const handleMapClick = (e) => {
+  const handleMapClick = async (e) => {
     const long = e.lngLat.lng
     const lat = e.lngLat.lat 
-
-    setSLatitude(lat)
-    setSLongitude(long)
 
     if(action === toolAction.addSupplier)
     {
       let supplierList = supplyData
-      // const response = await axios.post(`http://localhost:8000/posts/supplier`,{
-      //   postID,
-      //   name: '',
-      //   description: '',
-      //   latitude: lat,
-      //   longitude: long
-      // })
-
-      // const supplyID = response.data.insertId
-
-      const newSupplier = {
-        supplyID:1,
+      await axios.post(`http://localhost:8000/posts/supplier`,{
         postID,
         name: '',
         description: '',
-        longitude: long,
-        latitude: lat        
-      }
-      
-      supplierList.unshift(newSupplier)
-      setSupplyData(supplierList)
-      console.log(supplierList)
+        latitude: lat,
+        longitude: long
+      }).then((response)=>{
+        const supplyID = response.data.insertId
+
+        const newSupplier = {
+          supplyID,
+          postID,
+          name: '',
+          description: '',
+          longitude: long,
+          latitude: lat        
+        }
+        
+        supplierList.push(newSupplier)
+        setSupplyData(supplierList)
+        //for some reason deck.gl won't rerender based soley off if the
+        //supplyData array changes or not. We have to force the layer to
+        //rerender every time it sees the supplierUpdated variable change
+        setSupplierUpdated(Math.random())
+      }) 
     }
   }
 
@@ -275,8 +274,7 @@ function CreatorPage() {
       data: supplyData,
 
       getPosition: (d) => {
-        let result = [d.longitude,d.latitude]
-        console.log(result)
+        const result = [d.longitude,d.latitude]
         return result
       },
       getRadius: 25,
@@ -289,7 +287,7 @@ function CreatorPage() {
       autoHighlight: true,
       onClick: info => setSelected(info.object),
       updateTriggers:{
-        getPosition: [supplierLatitude, supplierLongitude]
+        getPosition: [supplierUpdated]
       }
     }),
     new PathLayer({
