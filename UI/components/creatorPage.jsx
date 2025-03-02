@@ -28,7 +28,6 @@ function DeckGLOverlay(props) {
 }
 
 
-
 function CreatorPage() {
   const {creatorData,setCreatorData} = getCreatorDataContext();
 
@@ -112,7 +111,6 @@ function CreatorPage() {
   const [factoryColor, setFactoryColor] = useState('rgb(255,255,255')
   const [relationColor, setRelationColor] = useState('rgb(255,255,255')
   const [deleteColor, setDeleteColor] = useState('rgb(255,255,255')
-  const [addSupplierInfo, setAddSupplierInfo] = useState({})
 
   const toolAction = {
     addSupplier: "addSupplier",
@@ -189,11 +187,15 @@ function CreatorPage() {
             <img src='../assets/connection.png' 
                 onClick={()=>setToolStatus(toolAction.addRelation)}
                 onMouseEnter={(e)=>e.target.style.backgroundColor = 'rgb(179, 179, 179)'}
-                onMouseLeave={(e)=>e.target.style.backgroundColor = relationColor}/>
+                onMouseLeave={(e)=>e.target.style.backgroundColor = relationColor}
+                onLoad={(e)=>e.target.style.backgroundColor = relationColor}
+                />
             <img src='../assets/cross.png' 
                 onClick={()=>setToolStatus(toolAction.delete)}
                 onMouseEnter={(e)=>e.target.style.backgroundColor = 'rgb(179, 179, 179)'}
-                onMouseLeave={(e)=>e.target.style.backgroundColor = deleteColor}/>
+                onMouseLeave={(e)=>e.target.style.backgroundColor = deleteColor}
+                onLoad={(e)=>e.target.style.backgroundColor = deleteColor}
+                />
             <p>{action}</p>
         </div>
     )
@@ -207,14 +209,38 @@ function CreatorPage() {
 
   //flag variable to tell deck to rerender when it changes
   const [supplierUpdated, setSupplierUpdated] = useState(0)
+  const [namespace, setnamespace] = useState('prefill')
+
+  //variables to store info on the currently selected supplier
   const currentSupplierIDref = useRef(-1)
   const currentSupplierLat = useRef(0)
   const currentSupplierLong = useRef(0)
+
   const postID = creatorData.postID
 
   const MakeOrEditSupplier = () => {
     const [newSupplierName,setNewSupplierName] = useState('')
     const [newSupplierDesc,setNewSupplierDesc] = useState('')
+
+    /*
+    There is probably a better way to do this but we need to update
+    the values inside the form whenever a user clicks on a supplier.
+    Unfortunately, the click handler is outside the scope of this element,
+    so we have to have this useEffect to auto update the values inside
+    the form whenever a new supplier is clicked on. When a user clicks
+    on a supplier the supplier's ID will be stored in currentSupplierIDref.current
+    and so that will be the way we are getting the information
+    */
+    useEffect(()=>{
+
+      const supplier = supplyData.filter((item)=> item.supplyID === currentSupplierIDref.current)
+      if(supplier[0])
+      {
+        setNewSupplierName(supplier[0].name)
+        setNewSupplierDesc(supplier[0].description)
+      } 
+    },[currentSupplierIDref.current])
+    
 
     //method to submit the updated name and description of a supplier
     const handleSubmit = async (e) => {
@@ -223,8 +249,23 @@ function CreatorPage() {
           postID,
           name: newSupplierName,
           description: newSupplierDesc,
-          latitude: currentSupplierLat,
-          longitude: currentSupplierLong
+          latitude: currentSupplierLat.current,
+          longitude: currentSupplierLong.current
+        }).then(()=>{
+          //also update the local representation of the data
+          const updatedSupplyData = supplyData.filter((item)=> item.supplyID !== currentSupplierIDref.current)
+
+          const updatedSupplier = {
+            supplyID:currentSupplierIDref.current,
+            postID,
+            name: newSupplierName,
+            description: newSupplierDesc,
+            latitude: currentSupplierLat.current,
+            longitude: currentSupplierLong.current
+          }
+
+          updatedSupplyData.unshift(updatedSupplier)
+          setSupplyData(updatedSupplyData)
         })
     }
 
@@ -233,12 +274,13 @@ function CreatorPage() {
             <h4>{currentSupplierIDref.current}</h4>
             <form>
                 <label htmlFor='newSupplierName'>Supplier Name</label>
-                <input type='text' id='newSupplierName' 
+                <input type='text' id='newSupplierName' value={newSupplierName}
                   onChange={(e)=>setNewSupplierName(e.target.value)}/>
             </form>
             <form>
                 <label htmlFor='supplierDesc'>Description</label>
-                <input type='text' id='supplierDesc' onChange={(e)=>setNewSupplierDesc(e.target.value)}/>
+                <input type='text' id='supplierDesc' value={newSupplierDesc}
+                  onChange={(e)=>setNewSupplierDesc(e.target.value)}/>
             </form>
             <button type='submit' onClick={handleSubmit}>Save</button> 
         </article>
@@ -285,6 +327,8 @@ function CreatorPage() {
         }
         
         //update the supplyData list with our new supplier
+        //only works for unshift, using .push will result in
+        //the new scatterplot being non-interactable 
         supplierList.unshift(newSupplier)
         setSupplyData(supplierList)
 
@@ -327,8 +371,10 @@ function CreatorPage() {
       pickable: true,
       autoHighlight: true,
       onClick: info => {
-        setSelected(info.object),
+        setSelected(info.object)
         currentSupplierIDref.current = info.object.supplyID
+        currentSupplierLat.current = info.object.latitude 
+        currentSupplierLong.current = info.object.longitude
       },
       updateTriggers:{
         getPosition: [supplierUpdated]
@@ -351,7 +397,7 @@ function CreatorPage() {
       <ToolBar/>
     </div>
     <PostEditor userIDprop={userID} adjListprop={2}/>
-    <MakeOrEditSupplier/>
+    <MakeOrEditSupplier n1={namespace} setn1={setnamespace}/>
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClick(e)}>
       {selected && (
         <Popup
