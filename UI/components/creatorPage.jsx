@@ -183,7 +183,9 @@ function CreatorPage() {
             <img src='../assets/industry-alt.png' 
                 onClick={()=>setToolStatus(toolAction.addSupplier)}
                 onMouseEnter={(e)=>e.target.style.backgroundColor = 'rgb(179, 179, 179)'}
-                onMouseLeave={(e)=>e.target.style.backgroundColor = factoryColor}/>
+                onMouseLeave={(e)=>e.target.style.backgroundColor = factoryColor}
+                onLoad={(e)=>e.target.style.backgroundColor = factoryColor}
+                />
             <img src='../assets/connection.png' 
                 onClick={()=>setToolStatus(toolAction.addRelation)}
                 onMouseEnter={(e)=>e.target.style.backgroundColor = 'rgb(179, 179, 179)'}
@@ -269,8 +271,8 @@ function CreatorPage() {
       }).then((response)=>{
         const supplyID = response.data.insertId
         currentSupplierIDref.current = supplyID
-        currentSupplierLat = lat
-        currentSupplierLong = long
+        currentSupplierLat.current = lat
+        currentSupplierLong.current = long
 
         //separate supplier object that has a supplyID
         const newSupplier = {
