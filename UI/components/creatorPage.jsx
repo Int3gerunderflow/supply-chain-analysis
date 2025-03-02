@@ -92,9 +92,6 @@ function CreatorPage() {
   useEffect(() => {
       const getSupplierInfo = async () => {
         const supplierList = await getAllSuppliers(creatorData.adjacencyList);
-        //Go  through the adjacency list and find the supplier with the ID of the final assembly location
-        const finalAssem = supplierList.filter((supplier)=>{return supplier.supplyID === creatorData.finalAssembly})[0]
-        setFinalAssem(finalAssem)
         setSupplyData(supplierList)
       };
       getSupplierInfo();
@@ -271,7 +268,6 @@ function CreatorPage() {
 
     return(
         <article className="supplierEditor">
-            <h4>{currentSupplierIDref.current}</h4>
             <form>
                 <label htmlFor='newSupplierName'>Supplier Name</label>
                 <input type='text' id='newSupplierName' value={newSupplierName}
@@ -287,10 +283,12 @@ function CreatorPage() {
     )
   }
 
-  const handleMapClick = async (e) => {
+  const handleMapClickSupplier = async (e) => {
     const long = e.lngLat.lng
     const lat = e.lngLat.lat 
-
+    //this is for when the user clicks off a supplier it
+    //will clear the form
+    currentSupplierIDref.current = -1;
 
     /*
     The moment a click happens and the add supplier tool is active a
@@ -349,6 +347,41 @@ function CreatorPage() {
     }
   }
 
+
+
+
+//---Adding relationships portion---//
+
+  //each of these will contain the ID of the verticies
+  const [firstVertex,setFirstVertex] = useState(-1)
+  const [secondVertex,setSecondVertex] = useState(-1)
+  
+  const handleMapClickRelationship = async (info) => {
+    const supplyID = info.object.supplyID
+
+    if(action === toolAction.addRelation)
+    {
+      //checking if the first vertex was selected already or not
+      if(firstVertex === -1)
+      {
+        setFirstVertex(supplyID)
+      }
+      else if(secondVertex === -1)
+      {
+        setSecondVertex(supplyID)
+      }
+      else
+      {
+        //in the weird case where something went wrong reset
+        setFirstVertex(-1)
+        setSecondVertex(-1)
+      }
+    }
+  }
+
+
+  
+
   
   
   //putting in the layers on top of the map
@@ -375,6 +408,7 @@ function CreatorPage() {
         currentSupplierIDref.current = info.object.supplyID
         currentSupplierLat.current = info.object.latitude 
         currentSupplierLong.current = info.object.longitude
+        handleMapClickRelationship(info)
       },
       updateTriggers:{
         getPosition: [supplierUpdated]
@@ -398,7 +432,7 @@ function CreatorPage() {
     </div>
     <PostEditor userIDprop={userID} adjListprop={2}/>
     <MakeOrEditSupplier n1={namespace} setn1={setnamespace}/>
-    <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClick(e)}>
+    <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClickSupplier(e)}>
       {selected && (
         <Popup
           key={selected.supplyID}
@@ -406,7 +440,10 @@ function CreatorPage() {
           style={{zIndex: 10}} /* position above deck.gl canvas */
           longitude={selected.longitude}
           latitude={selected.latitude}
-          onClose={()=>setSelected(null)}
+          onClose={()=>{
+            setSelected(null)
+            currentSupplierIDref.current=-1
+          }}
         >
           {selected.name} ({selected.description})
         </Popup>

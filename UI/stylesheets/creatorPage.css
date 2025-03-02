@@ -1,6 +1,6 @@
 .tool {
     position: absolute;
-    z-index: 5;
+    z-index: 11;
     display: flex;
     padding: 5px;
     background-color: rgb(255,255,255);
@@ -19,3 +19,4 @@
     display: flex;
     justify-content: center;
 }
+

@@ -10,27 +10,16 @@ function PostEditor({userIDprop, adjListprop}){
     const [adjacencyList, setAdjacencyList] = useState('')
     const [description, setDescription] = useState('')
 
-    const [postOrSave, setPostOrSave]  = useState("Post")
-
     const { creatorData, setCreatorData } = getCreatorDataContext();
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(postOrSave === "Post")
-        {
-            console.log("making new post")
-            try{
-                handleSubmitNewPost(e)
-                // setPostOrSave("Save")
-            }
-            catch(error)
-            {
-                console.log(error)
-            }
+        try{
+            handleSubmitNewPost(e)
         }
-        if(postOrSave === "Save")
+        catch(error)
         {
-            console.log('v')
+            console.log(error)
         }
     }
 
@@ -62,7 +51,7 @@ function PostEditor({userIDprop, adjListprop}){
                 <label htmlFor='desc'>Description:</label>
                 <input type='text' id='desc' onChange={(e)=>setDescription(e.target.value)}/>
             </form>
-            <button type='submit' onClick={handleSubmit}>{postOrSave}</button> 
+            <button type='submit' onClick={handleSubmit}>Save</button> 
         </article>
     )
 }
