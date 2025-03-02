@@ -6,9 +6,10 @@ import {Map as MapLibreMap, NavigationControl, Popup, useControl} from 'react-ma
 import {ScatterplotLayer, PathLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import PostEditor from './postEditor';
-import MakeOrEditSupplier from './makeOrEditSupplier';
+import { getCreatorDataContext } from './creatorData';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import './creatorPage.css';
+import '../stylesheets/creatorPage.css';
+import './makeOrEditSUpplier.css';
 
 
 
@@ -42,8 +43,8 @@ function CreatorPage() {
   const [selected, setSelected] = useState(null);
 
   //create a new data object that holds every supplier in this user's post
-  const [supplyData,setSupplyData] = useState([]) //list of every supplier
-  const [expandedAdjList, setExpAdjList] = useState([]) //array where every item contains a source and target destination
+  const [supplyData,setSupplyData] = useState([]) //list of every supplier and their details
+  const [expandedAdjList, setExpAdjList] = useState([]) //array where every item contains a source and target destination  
   const [finalAssemblyLocation, setFinalAssem] = useState(0)
 
   const getAllSuppliers = async (suppData) => {
@@ -92,15 +93,20 @@ function CreatorPage() {
 
   useEffect(() => {
       const getSupplierInfo = async () => {
-        const suppData = await getAllSuppliers(graphData.adjacencyList);
+        const supplierList = await getAllSuppliers(graphData.adjacencyList);
         //Go  through the adjacency list and find the supplier with the ID of the final assembly location
-        const finalAssem = suppData.filter((supplier)=>{return supplier.supplyID === graphData.finalAssembly})[0]
+        const finalAssem = supplierList.filter((supplier)=>{return supplier.supplyID === graphData.finalAssembly})[0]
         setFinalAssem(finalAssem)
-        setSupplyData(suppData)
+        setSupplyData(supplierList)
       };
       getSupplierInfo();
-    }, []);
+    }, [graphData]);
 
+
+
+
+
+//---Toolbar portion---//
 
   //state representing which tool has been selected
   const [action, setAction] = useState("none")
@@ -192,14 +198,74 @@ function CreatorPage() {
     )
   }
 
+
+
+
+
+  //---Supplier creation portion---//
+
+  const [supplierLatitude, setSLatitude] = useState(0)
+  const [supplierLongitude, setSLongitude] = useState(0)
+  const {creatorData, setCreatorData} = getCreatorDataContext()
+  const postID = creatorData.postID
+
+  const MakeOrEditSupplier = () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+    }
+
+
+    return(
+        <article className="supplierEditor">
+            <form>
+                <label htmlFor='name'>Supplier Name</label>
+                <input type='text' id='name' onChange={(e)=>setSName(e.target.value)}/>
+            </form>
+            <form>
+                <label htmlFor='company'>Description</label>
+                <input type='text' id='company' onChange={(e)=>setSDescription(e.target.value)}/>
+            </form>
+            <button type='submit' onClick={handleSubmit}>Save</button> 
+        </article>
+    )
+  }
+
   const handleMapClick = (e) => {
     const long = e.lngLat.lng
     const lat = e.lngLat.lat 
+
+    setSLatitude(lat)
+    setSLongitude(long)
+
     if(action === toolAction.addSupplier)
     {
+      let supplierList = supplyData
+      // const response = await axios.post(`http://localhost:8000/posts/supplier`,{
+      //   postID,
+      //   name: '',
+      //   description: '',
+      //   latitude: lat,
+      //   longitude: long
+      // })
 
+      // const supplyID = response.data.insertId
+
+      const newSupplier = {
+        supplyID:1,
+        postID,
+        name: '',
+        description: '',
+        longitude: long,
+        latitude: lat        
+      }
+      
+      supplierList.unshift(newSupplier)
+      setSupplyData(supplierList)
+      console.log(supplierList)
     }
   }
+
+  
   
   //putting in the layers on top of the map
   const layers = [
@@ -209,8 +275,9 @@ function CreatorPage() {
       data: supplyData,
 
       getPosition: (d) => {
-        const coordinates = [d.longitude,d.latitude]
-        return coordinates
+        let result = [d.longitude,d.latitude]
+        console.log(result)
+        return result
       },
       getRadius: 25,
       getFillColor: [255, 140, 0,180],
@@ -220,7 +287,10 @@ function CreatorPage() {
       radiusScale: 5000,
       pickable: true,
       autoHighlight: true,
-      onClick: info => setSelected(info.object)
+      onClick: info => setSelected(info.object),
+      updateTriggers:{
+        getPosition: [supplierLatitude, supplierLongitude]
+      }
     }),
     new PathLayer({
         id: '2dpaths',
@@ -239,7 +309,7 @@ function CreatorPage() {
       <ToolBar/>
     </div>
     <PostEditor userIDprop={userID} adjListprop={2}/>
-    <MakeOrEditSupplier/>
+    {/* <MakeOrEditSupplier/> */}
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClick(e)}>
       {selected && (
         <Popup

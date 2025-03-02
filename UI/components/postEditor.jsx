@@ -1,6 +1,7 @@
 import React, { useState} from "react";
 import axios from "axios"
 import './postEditor.css';
+import { getCreatorDataContext } from "./creatorData";
 
 function PostEditor({userIDprop, adjListprop}){
     const userID = userIDprop
@@ -11,11 +12,13 @@ function PostEditor({userIDprop, adjListprop}){
 
     const [postOrSave, setPostOrSave]  = useState("Post")
 
+    const { creatorData, setCreatorData } = getCreatorDataContext();
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         if(postOrSave === "Post")
         {
-            console.log("making new")
+            console.log("making new post")
             try{
                 handleSubmitNewPost(e)
                 // setPostOrSave("Save")
@@ -33,14 +36,17 @@ function PostEditor({userIDprop, adjListprop}){
 
     const handleSubmitNewPost = async (e) => {
         e.preventDefault()
-        await axios.post(`http://localhost:8000/posts`,{
+        const result = await axios.post(`http://localhost:8000/posts`,{
             userID,
             product,
             company,
             description,
             finalAssembly: -1
         })
+        creatorData.postID = result.data.insertId
+        setCreatorData(creatorData)
     }
+
 
     return(
         <article className="postEditor">
