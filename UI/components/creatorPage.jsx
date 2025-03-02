@@ -285,7 +285,7 @@ function CreatorPage() {
         }
         
         //update the supplyData list with our new supplier
-        supplierList.push(newSupplier)
+        supplierList.unshift(newSupplier)
         setSupplyData(supplierList)
 
         //update the adjacency list
