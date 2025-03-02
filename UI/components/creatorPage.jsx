@@ -369,6 +369,10 @@ function CreatorPage() {
       else if(secondVertex === -1)
       {
         setSecondVertex(supplyID)
+        const firstAdjList = creatorData.adjacencyList.filter((item)=>
+          Number(Object.keys(item)[0]) === firstVertex
+        )
+        console.log(firstAdjList)
       }
       else
       {
@@ -377,6 +381,14 @@ function CreatorPage() {
         setSecondVertex(-1)
       }
     }
+    else
+    {
+      //just to make sure reset the variables
+      setFirstVertex(-1)
+      setSecondVertex(-1)
+    }
+    console.log(firstVertex)
+    console.log(secondVertex)
   }
 
 
@@ -396,7 +408,7 @@ function CreatorPage() {
         return result
       },
       getRadius: 25,
-      getFillColor: [255, 140, 0,180],
+      getFillColor: [255, 140, 0, 180],
       getLineColor: [0, 0, 0],
       highlightColor: [200,0,80,128],
       getLineWidth: 10,
