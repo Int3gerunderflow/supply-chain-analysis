@@ -10,7 +10,9 @@ router.get('/supplier/:supplyID', supplyChainController.getSupplierDetails)
 
 router.post('/', supplyChainController.createNewBlankPost)
 
-router.put('/:postID', supplyChainController.updatePost) 
+router.put('/:postID/details', supplyChainController.updatePostDetails) 
+
+router.put('/:postID/adjacencyList', supplyChainController.updatePostAdjList)
 
 router.post('/supplier', supplyChainController.createNewSupplier)
 

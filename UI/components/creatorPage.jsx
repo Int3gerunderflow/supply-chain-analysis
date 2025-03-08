@@ -1,4 +1,4 @@
-import React, {useState,useEffect, useRef} from 'react';
+import React, {useState,useEffect, useRef, useContext} from 'react';
 import { useAuth } from './auth';
 import axios from 'axios';
 import {Map as MapLibreMap, NavigationControl, Popup, useControl} from 'react-map-gl/maplibre';
@@ -6,6 +6,7 @@ import {ScatterplotLayer, PathLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import PostEditor from './postEditor';
 import { getCreatorDataContext } from './creatorData';
+import { PostEditorProvider } from './postEditorContext';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import '../stylesheets/creatorPage.css';
 import './makeOrEditSUpplier.css';
@@ -392,8 +393,7 @@ function CreatorPage() {
       setSecondVertex(-1)
     }
   }
-
-
+ 
   
 
   
@@ -444,7 +444,11 @@ function CreatorPage() {
     <div className='toolContainer'>
       <ToolBar/>
     </div>
-    <PostEditor userIDprop={userID} adjListprop={2}/>
+
+    <PostEditorProvider>
+      <PostEditor userIDprop={userID}/>
+    </PostEditorProvider>
+    
     <MakeOrEditSupplier n1={namespace} setn1={setnamespace}/>
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClickSupplier(e)}>
       {selected && (

@@ -3,7 +3,8 @@ const {
     getSupplyChainPostDetails,
     getSupplierByID,
     makeNewBlankPost,
-    updatePostInDatabase,
+    updatePostDetailsInDatabase,
+    updatePostAdjListInDatabase,
     makeNewSupplier,
     updateSupplierInDatabase,
     deletePostByID,
@@ -47,9 +48,15 @@ const createNewBlankPost = async (req,res) => {
     res.send(result)
 }
 
-const updatePost = async (req,res) => {
+const updatePostDetails = async (req,res) => {
     const params = { postID:req.params.postID, ...req.body }
-    const result = await updatePostInDatabase(params)
+    const result = await updatePostDetailsInDatabase(params)
+    res.send(result)
+}
+
+const updatePostAdjList = async (req,res) => {
+    const params = { postID:req.params.postID, ...req.body}
+    const result = await updatePostAdjListInDatabase(params)
     res.send(result)
 }
 
@@ -106,7 +113,8 @@ module.exports = {
     getPostDetails, 
     getSupplierDetails, 
     createNewBlankPost,
-    updatePost, 
+    updatePostDetails,
+    updatePostAdjList, 
     deletePost, 
     createNewSupplier,
     updateSupplier,

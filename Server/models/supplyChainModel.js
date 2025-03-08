@@ -34,8 +34,22 @@ const makeNewBlankPost = async (params) => {
     } 
 }
 
-const updatePostInDatabase = async (params) => {
-    const {postID, userID, adjacencyList, product, company, description} = params
+const updatePostDetailsInDatabase = async (params) => {
+    const {postID, userID, product, company, description} = params
+
+    try {
+        const [result, fields] = await connection.promise().query(`UPDATE POSTS SET
+            userID ='${userID}', product='${product}', company= '${company}', description='${description}'
+            WHERE postID = ${postID};`);
+        return result
+    } catch (error) {
+        console.log(error)
+        return error.code
+    } 
+}
+
+const updatePostAdjListInDatabase = async (params) => {
+    const {postID, userID, adjacencyList} = params
 
     let JSONstring = 'JSON_ARRAY('
     //convert the adjacencyList JSON into the appropriate SQL query
@@ -80,7 +94,7 @@ const updatePostInDatabase = async (params) => {
 
     try {
         const [result, fields] = await connection.promise().query(`UPDATE posts SET  
-            userID = ${userID}, adjacencyList = ${JSONstring}, product = '${product}', company = '${company}', description = '${description}'
+            userID = ${userID}, adjacencyList = ${JSONstring}
             WHERE postID = ${postID};`);
         return result
     } catch (error) {
@@ -139,7 +153,8 @@ module.exports = {
     getSupplyChainPostDetails, 
     getSupplierByID,
     makeNewBlankPost, 
-    updatePostInDatabase, 
+    updatePostDetailsInDatabase,
+    updatePostAdjListInDatabase, 
     makeNewSupplier, 
     updateSupplierInDatabase,
     deletePostByID, 

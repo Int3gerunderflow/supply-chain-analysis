@@ -1,14 +1,14 @@
-import React, { useState} from "react";
+import React, { useContext } from "react";
 import axios from "axios"
 import './postEditor.css';
 import { getCreatorDataContext } from "./creatorData";
+import { PostEditorContext } from "./postEditorContext";
 
-function PostEditor({userIDprop, adjListprop}){
+const PostEditor = ({userIDprop}) => 
+{
     const userID = userIDprop
-    const [product, setProduct] = useState('')
-    const [company, setCompany] = useState('')
-    const [description, setDescription] = useState('')
-
+    const {product,setProduct,company,setCompany,description,setDescription}= useContext(PostEditorContext)
+    
     const { creatorData, setCreatorData } = getCreatorDataContext();
 
     const handleSubmit = async (e) => {
