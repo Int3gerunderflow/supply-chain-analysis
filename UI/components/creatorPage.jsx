@@ -448,7 +448,7 @@ function CreatorPage() {
     <PostEditorProvider>
       <PostEditor userIDprop={userID}/>
     </PostEditorProvider>
-    
+
     <MakeOrEditSupplier n1={namespace} setn1={setnamespace}/>
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClickSupplier(e)}>
       {selected && (
