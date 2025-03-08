@@ -56,7 +56,6 @@ function CreatorPage() {
   const getAllSuppliers = async (suppData) => {
     const suppliersArray = []
     const keys = Object.keys(suppData)
-    console.log(keys)
     for(let k of keys)
     {
       await axios.get(`http://localhost:8000/posts/supplier/${Number(k)}`)
@@ -331,7 +330,7 @@ function CreatorPage() {
 
         //update the adjacency list
         let updatedcreatorData = creatorData
-        updatedcreatorData.adjacencyList[newSupplier.SupplyID] = []
+        updatedcreatorData.adjacencyList[supplyID] = []
         setCreatorData(updatedcreatorData)
 
 
@@ -357,22 +356,27 @@ function CreatorPage() {
 
     if(action === toolAction.addRelation)
     {
-      //checking if the first vertex was selected already or not
-      if(firstVertex === -1)
-      {
-        console.log("first")
-        setFirstVertex(supplyID)
-      }
-      else if(secondVertex === -1)
-      {
-        setSecondVertex(supplyID)
+      //if the first vertex hasn't been selected go and select it
+      if (firstVertex === -1) {
+        setFirstVertex(supplyID);
+      } 
+      else if (secondVertex === -1) {
+        setSecondVertex((prevSecond) => {
+          const newSecond = supplyID;
+  
+          // Now, safely update the adjacency list since we know newSecond's value
+          setFirstVertex((prevFirst) => {
+            creatorData.adjacencyList[prevFirst].push(newSecond);
+            return prevFirst; // value of firstVertex is preserved
+          });
+  
+          creatorData.adjacencyList[newSecond].push(firstVertex);
+  
+          return newSecond; // Correctly update secondVertex
+        })
 
-        //go through and get the first vertex's adjacency list
-        const firstAdjList = creatorData.adjacencyList.filter((item)=>
-          Number(Object.keys(item)[0]) === firstVertex
-        )
-
-
+        //now that the local adjacency list has been updated go ahead and
+        //let the backend know of the changes.
       }
       else
       {

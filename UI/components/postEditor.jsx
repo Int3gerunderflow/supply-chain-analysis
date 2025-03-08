@@ -7,7 +7,6 @@ function PostEditor({userIDprop, adjListprop}){
     const userID = userIDprop
     const [product, setProduct] = useState('')
     const [company, setCompany] = useState('')
-    const [adjacencyList, setAdjacencyList] = useState('')
     const [description, setDescription] = useState('')
 
     const { creatorData, setCreatorData } = getCreatorDataContext();
