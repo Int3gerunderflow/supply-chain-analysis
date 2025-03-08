@@ -45,14 +45,24 @@ function CreatorPage() {
   const [expandedAdjList, setExpAdjList] = useState([]) //array where every item contains a source and target destination  
   const [finalAssemblyLocation, setFinalAssem] = useState(0)
 
+  useEffect(() => {
+    const getSupplierInfo = async () => {
+      const supplierList = await getAllSuppliers(creatorData.adjacencyList);
+      setSupplyData(supplierList)
+    };
+    getSupplierInfo();
+  }, [creatorData]);
+
   const getAllSuppliers = async (suppData) => {
     const suppliersArray = []
-    for(const element of suppData)
+    const keys = Object.keys(suppData)
+    console.log(keys)
+    for(let k of keys)
     {
-      await axios.get(`http://localhost:8000/posts/supplier/${Number(Object.keys(element)[0])}`)
+      await axios.get(`http://localhost:8000/posts/supplier/${Number(k)}`)
          .then((reply)=>{
             suppliersArray.push(reply.data);
-            supplierHashMap.set(Number(Object.keys(element)[0]), reply.data)
+            supplierHashMap.set(k, reply.data)
         })
     }
     //once the hashmap is set also set up the expanded adjacency list
@@ -65,10 +75,10 @@ function CreatorPage() {
   const populateExpandedAdjList = () => {
     const resultArray = []
     const seenVerticies = new Set() //create a hashset to keep track of which vertices we have already seen to avoid duplicates
-    for(const entry of creatorData.adjacencyList)
+    Object.entries(creatorData.adjacencyList).forEach(([key,value])=>
     {
-      const vertex = Number(Object.keys(entry)[0])
-      const neighbors = Object.values(entry)[0]
+      const vertex = key
+      const neighbors = value
       for(let n of neighbors)
       {
         if(seenVerticies.has(n))
@@ -85,20 +95,9 @@ function CreatorPage() {
         })
       }
       seenVerticies.add(vertex)
-    }
+    });
     setExpAdjList(resultArray)
   }
-
-  useEffect(() => {
-      const getSupplierInfo = async () => {
-        const supplierList = await getAllSuppliers(creatorData.adjacencyList);
-        setSupplyData(supplierList)
-      };
-      getSupplierInfo();
-    }, [creatorData]);
-
-
-
 
 
 //---Toolbar portion---//
@@ -332,10 +331,7 @@ function CreatorPage() {
 
         //update the adjacency list
         let updatedcreatorData = creatorData
-        const newVertexInAdjList = {
-          [supplyID]:[]
-        }
-        updatedcreatorData.adjacencyList.push(newVertexInAdjList)
+        updatedcreatorData.adjacencyList[newSupplier.SupplyID] = []
         setCreatorData(updatedcreatorData)
 
 
@@ -364,15 +360,19 @@ function CreatorPage() {
       //checking if the first vertex was selected already or not
       if(firstVertex === -1)
       {
+        console.log("first")
         setFirstVertex(supplyID)
       }
       else if(secondVertex === -1)
       {
         setSecondVertex(supplyID)
+
+        //go through and get the first vertex's adjacency list
         const firstAdjList = creatorData.adjacencyList.filter((item)=>
           Number(Object.keys(item)[0]) === firstVertex
         )
-        console.log(firstAdjList)
+
+
       }
       else
       {
@@ -387,8 +387,6 @@ function CreatorPage() {
       setFirstVertex(-1)
       setSecondVertex(-1)
     }
-    console.log(firstVertex)
-    console.log(secondVertex)
   }
 
 
