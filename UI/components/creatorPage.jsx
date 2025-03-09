@@ -287,6 +287,7 @@ function CreatorPage() {
   const handleMapClickSupplier = async (e) => {
     const long = e.lngLat.lng
     const lat = e.lngLat.lat 
+
     //this is for when the user clicks off a supplier it
     //will clear the form
     currentSupplierIDref.current = -1;
@@ -349,13 +350,13 @@ function CreatorPage() {
 
 
 
-//---Adding relationships portion---//
+//---Adding relationships and deleting suppliers portion---//
 
-  //each of these will contain the ID of the verticies
+  //each of these refs will contain the ID of the verticies
   const firstVertexRef = useRef(-1)
   const secondVertexRef = useRef(-1)
   
-  const handleMapClickRelationship = async (info) => {
+  const handleMapClickOnSupplier = async (info) => {
     const supplyID = info.object.supplyID
 
     if(action === toolAction.addRelation)
@@ -389,6 +390,53 @@ function CreatorPage() {
         //in the weird case where something went wrong reset
         firstVertexRef.current=-1
         secondVertexRef.current=-1
+      }
+    }
+    else if(action === toolAction.delete)
+    {
+      const supplyID = info.object.supplyID
+      console.log('deleting', supplyID)
+
+      //we first have to iterate through the adjacency list to
+      //remove references to this supplier entirely
+      const clonedSupplyData = structuredClone(supplyData)
+      const rollbackCreator = creatorData
+      const clonedCreatorData = structuredClone(creatorData)
+      const newSupplyData = clonedSupplyData.filter((item)=>item.supplyID!=supplyID)
+
+      const newAdjList = {}
+      //for each key in the adjacency list, go through its adjacency list
+      //and remove references of the soon to be deleted supplier
+      for(const entry of Object.entries(clonedCreatorData.adjacencyList))
+      {
+        const key = entry[0]
+        const value = entry[1]
+
+        if(Number(key) === supplyID)
+        {
+          //obviously don't include the deleted supplier in the new adjacency list
+          continue;
+        }
+        const updatedAdjacencies = value.filter((vertex)=>vertex != supplyID)
+        newAdjList[key]=updatedAdjacencies
+      }
+
+      
+      clonedCreatorData.adjacencyList=newAdjList
+      setSupplyData(newSupplyData)
+      setCreatorData(clonedCreatorData)
+
+
+      try{
+        axios.put(`http://localhost:8000/posts/${postID}/adjacencyList`,{
+          userID,
+          adjacencyList: creatorData.adjacencyList
+        })
+      }
+      catch(error)
+      {
+        setCreatorData(rollbackCreator)
+        console.log(error)
       }
     }
     else
@@ -425,7 +473,7 @@ function CreatorPage() {
         currentSupplierIDref.current = info.object.supplyID
         currentSupplierLat.current = info.object.latitude 
         currentSupplierLong.current = info.object.longitude
-        handleMapClickRelationship(info)
+        handleMapClickOnSupplier(info)
       },
       updateTriggers:{
         getPosition: [supplierUpdated]
