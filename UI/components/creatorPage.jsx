@@ -31,6 +31,7 @@ function DeckGLOverlay(props) {
 
 function CreatorPage() {
   const {creatorData,setCreatorData} = getCreatorDataContext();
+  const postID = creatorData.postID
 
   const supplierHashMap = new Map();
 
@@ -48,7 +49,25 @@ function CreatorPage() {
 
   useEffect(() => {
     const getSupplierInfo = async () => {
-      const supplierList = await getAllSuppliers(creatorData.adjacencyList);
+      let supplierList = []
+      if(postID)
+      {
+        const suppListFromAPI = await axios.get(`http://localhost:8000/posts/${postID}`)
+        const formattedAdjList = {}
+        //transform the data from the server to the appropriate format for the frontend
+        for(const entry of suppListFromAPI.data.adjacencyList)
+        {
+          const key = Object.keys(entry)[0]
+          const value = Object.values(entry)[0]
+          formattedAdjList[key] = value
+        }
+        supplierList = await getAllSuppliers(formattedAdjList)
+      }
+      else
+      {
+        supplierList = await getAllSuppliers(creatorData.adjacencyList);
+      }
+
       setSupplyData(supplierList)
     };
     getSupplierInfo();
@@ -212,8 +231,6 @@ function CreatorPage() {
   const currentSupplierIDref = useRef(-1)
   const currentSupplierLat = useRef(0)
   const currentSupplierLong = useRef(0)
-
-  const postID = creatorData.postID
 
   const MakeOrEditSupplier = () => {
     const [newSupplierName,setNewSupplierName] = useState('')
