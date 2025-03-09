@@ -250,7 +250,8 @@ function CreatorPage() {
           longitude: currentSupplierLong.current
         }).then(()=>{
           //also update the local representation of the data
-          const updatedSupplyData = supplyData.filter((item)=> item.supplyID !== currentSupplierIDref.current)
+          const cloneData = structuredClone(supplyData)
+          const updatedSupplyData = cloneData.filter((item)=> item.supplyID !== currentSupplierIDref.current)
 
           const updatedSupplier = {
             supplyID:currentSupplierIDref.current,
@@ -261,7 +262,7 @@ function CreatorPage() {
             longitude: currentSupplierLong.current
           }
 
-          updatedSupplyData.unshift(updatedSupplier)
+          updatedSupplyData.push(updatedSupplier)
           setSupplyData(updatedSupplyData)
         })
     }
