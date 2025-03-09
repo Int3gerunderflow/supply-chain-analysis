@@ -250,7 +250,7 @@ function CreatorPage() {
           longitude: currentSupplierLong.current
         }).then(()=>{
           //also update the local representation of the data
-          const cloneData = structuredClone(supplyData)
+          const cloneData = structuredClone(supplyData) //perform a deep copy of array so deck can update properly
           const updatedSupplyData = cloneData.filter((item)=> item.supplyID !== currentSupplierIDref.current)
 
           const updatedSupplier = {
@@ -302,6 +302,9 @@ function CreatorPage() {
     */
     if(action === toolAction.addSupplier)
     {
+      //to ensure deck behaves properly perform a deep copy of the old array
+      //so that everything updates correctly. Not doing this results in
+      //some suppliers becoming non-interactable when new suppliers are added
       let supplierList = structuredClone(supplyData)
       await axios.post(`http://localhost:8000/posts/supplier`,{
         postID,
@@ -326,8 +329,6 @@ function CreatorPage() {
         }
         
         //update the supplyData list with our new supplier
-        //only works for unshift, using .push will result in
-        //the new scatterplot being non-interactable 
         supplierList.push(newSupplier)
         setSupplyData(supplierList)
 
@@ -365,10 +366,11 @@ function CreatorPage() {
       } 
       else if (secondVertexRef.current === -1) {
         const rollbackCreator = creatorData
-        const newCreatorData = creatorData
+        //once again perform a deep copy so that deck properly updates the data
+        const newCreatorData = structuredClone(creatorData)
         secondVertexRef.current=supplyID
-        newCreatorData.adjacencyList[firstVertexRef.current].unshift(secondVertexRef.current)
-        newCreatorData.adjacencyList[secondVertexRef.current].unshift(firstVertexRef.current)
+        newCreatorData.adjacencyList[firstVertexRef.current].push(secondVertexRef.current)
+        newCreatorData.adjacencyList[secondVertexRef.current].push(firstVertexRef.current)
         setCreatorData(newCreatorData)      
         try{
           axios.put(`http://localhost:8000/posts/${postID}/adjacencyList`,{
@@ -430,7 +432,7 @@ function CreatorPage() {
       }
     }),
     new PathLayer({
-        id: '2dpaths',
+        id: 'relationshipPaths',
         data: expandedAdjList,
         getColor:[234, 60, 152],
         getWidth: 4,
