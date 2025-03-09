@@ -4,6 +4,8 @@ import axios from 'axios';
 import {Map as MapLibreMap, NavigationControl, Popup, useControl} from 'react-map-gl/maplibre';
 import {ScatterplotLayer, ArcLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
+import PostInfoCard from './postInfoCard';
+import SupplierInfoCard from './supplyInfoCard';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 
@@ -27,13 +29,44 @@ function DeckGLOverlay(props) {
 
 function MapPage() {
   const {graphData,setsuppData} = getMapDataContext()
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState({});
+  const [postInfo, setPostsInfo] = useState({})
+  const postID = graphData.postID
+
+  //make an api call to get the details of this post
+  useEffect(()=>{
+    const getPostDetails = async ()=>{
+      try{
+        const response = await axios.get(`http://localhost:8000/posts/${postID}`)
+        const {product, company, description} = response.data
+        setPostsInfo({product,company,description})
+      }
+      catch(error)
+      {
+        console.log(error)
+      }
+    }
+    getPostDetails()
+  }, [])
+
   const supplierHashMap = new Map();
 
   //create a new data object that holds every supplier in this user's post
   const [supplyData,setSupplyData] = useState([]) //list of every supplier
   const [expandedAdjList, setExpAdjList] = useState([]) //array where every item contains a source and target destination
   const [finalAssemblyLocation, setFinalAssem] = useState(0)
+
+  //transform and format the adjacency list so that deck.gl can render properly
+  useEffect(() => {
+    const getSupplierInfo = async () => {
+      const suppData = await getAllSuppliers(graphData.adjacencyList);
+      //Go  through the adjacency list and find the supplier with the ID of the final assembly location
+      const finalAssem = suppData.filter((supplier)=>{return supplier.supplyID === graphData.finalAssembly})[0]
+      setFinalAssem(finalAssem)
+      setSupplyData(suppData)
+    };
+    getSupplierInfo();
+  }, []);
 
   const getAllSuppliers = async (suppData) => {
     const suppliersArray = []
@@ -74,20 +107,8 @@ function MapPage() {
       }
       seenVerticies.add(vertex)
     }
-    console.log(resultArray)
     setExpAdjList(resultArray)
   }
-
-  useEffect(() => {
-    const getSupplierInfo = async () => {
-      const suppData = await getAllSuppliers(graphData.adjacencyList);
-      //Go  through the adjacency list and find the supplier with the ID of the final assembly location
-      const finalAssem = suppData.filter((supplier)=>{return supplier.supplyID === graphData.finalAssembly})[0]
-      setFinalAssem(finalAssem)
-      setSupplyData(suppData)
-    };
-    getSupplierInfo();
-  }, []);
   
   //putting in the layers on top of the map
   const layers = [
@@ -125,21 +146,15 @@ function MapPage() {
   ];
 
   return (
-    <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false}>
-      {selected && (
-        <Popup
-          key={selected.supplyID}
-          anchor="bottom"
-          style={{zIndex: 10}} /* position above deck.gl canvas */
-          longitude={selected.longitude}
-          latitude={selected.latitude}
-        >
-          {selected.name} ({selected.description})
-        </Popup>
-      )}
-      <DeckGLOverlay layers={layers} /* interleaved*/ />
-      <NavigationControl position="top-right" />
-    </MapLibreMap>
+    <>
+      <PostInfoCard product={postInfo.product} company={postInfo.company} description={postInfo.description}/>
+      <SupplierInfoCard name={selected.name || ''} description={selected.description || ''}/>
+      <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false}
+        onClick={(e)=>setSelected({})}>
+        <DeckGLOverlay layers={layers} /* interleaved*/ />
+        <NavigationControl position="top-right" />
+      </MapLibreMap>
+    </>
   );
 }
 

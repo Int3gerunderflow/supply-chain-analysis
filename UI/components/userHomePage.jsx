@@ -37,7 +37,8 @@ function UserHomePage(){
         <React.Fragment>
             <h2>hi</h2>
             {userPosts.map((item)=> {
-                return <PostDescriptionCard key={item.postID} {...item}/>
+                const data = {postID:item.postID, ...item}
+                return <PostDescriptionCard key={item.postID} {...data}/>
             })}
             <button onClick={makeNewPost}>Make new post</button>
         </React.Fragment>
@@ -45,12 +46,12 @@ function UserHomePage(){
 
 }
 
-const PostDescriptionCard = ({adjacencyList, product, company, finalAssembly})=>{
+const PostDescriptionCard = ({postID, adjacencyList, product, company, finalAssembly})=>{
     const { setGraphData } = getMapDataContext();
     const navigate = useNavigate()
 
     const handleClick = () => {
-        setGraphData({adjacencyList, finalAssembly})
+        setGraphData({postID, adjacencyList, finalAssembly})
         navigate("/map", { replace: true })
     }
     return(
