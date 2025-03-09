@@ -62,11 +62,12 @@ function CreatorPage() {
       await axios.get(`http://localhost:8000/posts/supplier/${Number(k)}`)
          .then((reply)=>{
             suppliersArray.push(reply.data);
-            supplierHashMap.set(k, reply.data)
+            supplierHashMap.set(Number(k), reply.data)
         })
     }
     //once the hashmap is set also set up the expanded adjacency list
     populateExpandedAdjList();
+    
     return suppliersArray
   }
 
@@ -77,7 +78,7 @@ function CreatorPage() {
     const seenVerticies = new Set() //create a hashset to keep track of which vertices we have already seen to avoid duplicates
     Object.entries(creatorData.adjacencyList).forEach(([key,value])=>
     {
-      const vertex = key
+      const vertex = Number(key)
       const neighbors = value
       for(let n of neighbors)
       {
@@ -349,8 +350,8 @@ function CreatorPage() {
 //---Adding relationships portion---//
 
   //each of these will contain the ID of the verticies
-  const [firstVertex,setFirstVertex] = useState(-1)
-  const [secondVertex,setSecondVertex] = useState(-1)
+  const firstVertexRef = useRef(-1)
+  const secondVertexRef = useRef(-1)
   
   const handleMapClickRelationship = async (info) => {
     const supplyID = info.object.supplyID
@@ -358,43 +359,42 @@ function CreatorPage() {
     if(action === toolAction.addRelation)
     {
       //if the first vertex hasn't been selected go and select it
-      if (firstVertex === -1) {
-        setFirstVertex(supplyID);
+      if (firstVertexRef.current === -1) {
+        firstVertexRef.current=supplyID
       } 
-      else if (secondVertex === -1) {
-        setSecondVertex((prevSecond) => {
-          const newSecond = supplyID;
-  
-          // Now, safely update the adjacency list since we know newSecond's value
-          setFirstVertex((prevFirst) => {
-            creatorData.adjacencyList[prevFirst].push(newSecond);
-            return prevFirst; // value of firstVertex is preserved
-          });
-  
-          creatorData.adjacencyList[newSecond].push(firstVertex);
-  
-          return newSecond; // Correctly update secondVertex
-        })
-
-        //now that the local adjacency list has been updated go ahead and
-        //let the backend know of the changes.
+      else if (secondVertexRef.current === -1) {
+        const rollbackCreator = creatorData
+        const newCreatorData = creatorData
+        secondVertexRef.current=supplyID
+        newCreatorData.adjacencyList[firstVertexRef.current].unshift(secondVertexRef.current)
+        newCreatorData.adjacencyList[secondVertexRef.current].unshift(firstVertexRef.current)
+        setCreatorData(newCreatorData)      
+        try{
+          axios.put(`http://localhost:8000/posts/${postID}/adjacencyList`,{
+            userID,
+            adjacencyList: creatorData.adjacencyList
+          })
+        }
+        catch(error)
+        {
+          setCreatorData(rollbackCreator)
+          console.log(error)
+        }
       }
       else
       {
         //in the weird case where something went wrong reset
-        setFirstVertex(-1)
-        setSecondVertex(-1)
+        firstVertexRef.current=-1
+        secondVertexRef.current=-1
       }
     }
     else
     {
       //just to make sure reset the variables
-      setFirstVertex(-1)
-      setSecondVertex(-1)
+      firstVertexRef.current=-1
+      secondVertexRef.current=-1
     }
   }
- 
-  
 
   
   
