@@ -91,8 +91,8 @@ function CreatorPage() {
         const nLongitude = supplierHashMap.get(n).longitude
         const nLatitude = supplierHashMap.get(n).latitude
         resultArray.push({
-          "source": [srcLongitude,srcLatitude],
-          "target": [nLongitude, nLatitude]
+          "source": [srcLongitude,srcLatitude,vertex],
+          "target": [nLongitude, nLatitude,n]
         })
       }
       seenVerticies.add(vertex)
@@ -448,6 +448,58 @@ function CreatorPage() {
   }
 
   
+//---Deleting relationships portion---//
+  const handleMapClickOnRelationship = (info) => {
+    if(action===toolAction.delete)
+    {
+      const firstVertex = info.object.source[2]
+      const secondVertex = info.object.target[2]
+
+      //we first have to iterate through the adjacency list to
+      //remove references to this supplier entirely
+      const rollbackCreator = creatorData
+      const clonedCreatorData = structuredClone(creatorData)
+      console.log(creatorData.adjacencyList)
+
+      const newAdjList = {}
+      //for the two verticies in the relationship, find their keys in the adjacency list, 
+      // go through and remove references to the other vertex
+      for(const entry of Object.entries(clonedCreatorData.adjacencyList))
+      {
+        const key = entry[0]
+        const value = entry[1]
+
+        //only process vertices not in the relation to be deleted
+        if(Number(key) === firstVertex || Number(key) === secondVertex)
+        {
+          const updatedAdjacencies = value.filter((vertex)=>vertex != firstVertex && vertex != secondVertex)
+          newAdjList[key]=updatedAdjacencies
+        }
+        else
+        {
+          newAdjList[key]=value
+        }        
+      }
+
+      
+      clonedCreatorData.adjacencyList=newAdjList
+      console.log(clonedCreatorData.adjacencyList)
+      setCreatorData(clonedCreatorData)
+
+
+      try{
+        axios.put(`http://localhost:8000/posts/${postID}/adjacencyList`,{
+          userID,
+          adjacencyList: creatorData.adjacencyList
+        })
+      }
+      catch(error)
+      {
+        setCreatorData(rollbackCreator)
+        console.log(error)
+      }
+    }
+  }  
   
   //putting in the layers on top of the map
   const layers = [
@@ -483,10 +535,11 @@ function CreatorPage() {
         id: 'relationshipPaths',
         data: expandedAdjList,
         getColor:[234, 60, 152],
-        getWidth: 4,
-        widthUnits: 'pixels',
+        widthUnits:'pixels',
+        getWidth: 8,
         getPath: d => [[d.source[0], d.source[1]],[d.target[0], d.target[1]]],
-        pickable: true
+        pickable: true,
+        onClick: info => handleMapClickOnRelationship(info)
     })
   ];
 
