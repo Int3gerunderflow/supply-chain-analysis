@@ -301,7 +301,7 @@ function CreatorPage() {
     */
     if(action === toolAction.addSupplier)
     {
-      let supplierList = supplyData
+      let supplierList = structuredClone(supplyData)
       await axios.post(`http://localhost:8000/posts/supplier`,{
         postID,
         name: 'unnamed',
@@ -327,7 +327,7 @@ function CreatorPage() {
         //update the supplyData list with our new supplier
         //only works for unshift, using .push will result in
         //the new scatterplot being non-interactable 
-        supplierList.unshift(newSupplier)
+        supplierList.push(newSupplier)
         setSupplyData(supplierList)
 
         //update the adjacency list
