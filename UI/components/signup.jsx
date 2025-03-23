@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useAuth } from './auth'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 function SignupPage(){
     const [username, setUsername] = useState('')
@@ -6,23 +9,25 @@ function SignupPage(){
     const [password2, setPassword2] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
 
+    const { setToken } = useAuth()
+    const navigate = useNavigate()
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         if(password === password2)
         {
             try {
-                const response = await fetch(`http://localhost:8000/users`,{
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username:`${username}`,
-                        password: `${password}`,
-                        pfp:"default"
-                    }),
-                }).then(result => result.json())
+                const response = await axios.post(`http://localhost:8000/users`,{
+                    username,
+                    password,
+                    pfp:"default"
+                })
+                console.log(response.data)
+                setToken(response.data)
+                navigate("/profile", { replace: true })
                 setErrorMsg('')
-                console.log(response)
             } catch (error) {
+                console.log(error)
                 setErrorMsg(String(error))
             }
         }

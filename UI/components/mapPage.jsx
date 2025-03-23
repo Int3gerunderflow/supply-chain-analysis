@@ -29,7 +29,7 @@ function DeckGLOverlay(props) {
 
 function MapPage() {
   const {graphData,setsuppData} = getMapDataContext()
-  const [selected, setSelected] = useState({});
+  const [selected, setSelected] = useState(null);
   const [postInfo, setPostsInfo] = useState({})
   const postID = graphData.postID
 
@@ -148,10 +148,24 @@ function MapPage() {
   return (
     <>
       <PostInfoCard product={postInfo.product} company={postInfo.company} description={postInfo.description}/>
-      <SupplierInfoCard name={selected.name || ''} description={selected.description || ''}/>
+      {/* <SupplierInfoCard name={selected.name || ''} description={selected.description || ''}/> */}
       <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false}
-        onClick={(e)=>setSelected({})}>
-        
+        onClick={(e)=>setSelected(null)}>
+        {selected && (
+                <Popup
+                  key={selected.supplyID}
+                  anchor="bottom"
+                  style={{zIndex: 5}} /* position above deck.gl canvas */
+                  longitude={selected.longitude}
+                  latitude={selected.latitude}
+                  onClose={()=>{
+                    setSelected(null)
+                  }}
+                >
+                  <h4>{selected.name}</h4>
+                  <p>{selected.description}</p>
+                </Popup>
+              )}        
         <DeckGLOverlay layers={layers} /* interleaved*/ />
         <NavigationControl position="top-right" />
       </MapLibreMap>

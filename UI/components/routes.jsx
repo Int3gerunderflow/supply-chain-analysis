@@ -6,6 +6,7 @@ import LoginPage from "./login";
 import MapPage from "./mapPage";
 import UserHomePage from "./userHomePage";
 import CreatorPage from "./creatorPage";
+import SignupPage from "./signup";
 import React from 'react'
 
 function Routes() {
@@ -24,6 +25,10 @@ function Routes() {
         {
             path: "/login",
             element: <LoginPage/>
+        },
+        {
+            path:"/signup",
+            element: <SignupPage/>
         }
     ];
 

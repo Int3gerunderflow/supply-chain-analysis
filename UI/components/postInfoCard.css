@@ -8,7 +8,8 @@
     border-radius: 18px;
     font-family: 'Sarabun','Helvetica';
     width: max(20%,18em);
-    height: 40vh;
+    max-height: 40vh;
+    z-index: 7;
 }
 
 h2{
