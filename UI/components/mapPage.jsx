@@ -7,6 +7,7 @@ import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import PostInfoCard from './postInfoCard';
 import SupplierInfoCard from './supplyInfoCard';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import './popup.css'
 
 
 
@@ -154,6 +155,7 @@ function MapPage() {
         {selected && (
                 <Popup
                   key={selected.supplyID}
+                  className='popup'
                   anchor="bottom"
                   style={{zIndex: 5}} /* position above deck.gl canvas */
                   longitude={selected.longitude}
@@ -162,8 +164,10 @@ function MapPage() {
                     setSelected(null)
                   }}
                 >
-                  <h4>{selected.name}</h4>
-                  <p>{selected.description}</p>
+                  <h3>{selected.name}</h3>
+                  <div className='popupContent'>
+                    <p>{selected.description}</p>
+                  </div>
                 </Popup>
               )}        
         <DeckGLOverlay layers={layers} /* interleaved*/ />
