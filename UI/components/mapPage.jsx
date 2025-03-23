@@ -151,6 +151,7 @@ function MapPage() {
       <SupplierInfoCard name={selected.name || ''} description={selected.description || ''}/>
       <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false}
         onClick={(e)=>setSelected({})}>
+        
         <DeckGLOverlay layers={layers} /* interleaved*/ />
         <NavigationControl position="top-right" />
       </MapLibreMap>
