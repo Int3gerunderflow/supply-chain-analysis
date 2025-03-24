@@ -1,0 +1,72 @@
+article{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Noto Sans Devanagari', 'Helvetica';
+}
+
+.login-container {
+    margin-top: 6em;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+}
+
+.login-container h2 {
+    margin: 0 0 1.5rem;
+    text-align: center;
+}
+
+.login-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    background: #021859;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background: #010626;
+}
+
+.login-container p {
+    text-align: center;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+#firstButton{
+    margin-top:1em;
+}
+
+article p{
+    margin:1.6em 0;
+}
+
+p.errorMessage{
+    text-align:start;
+    color:red;
+    margin: 0;
+}

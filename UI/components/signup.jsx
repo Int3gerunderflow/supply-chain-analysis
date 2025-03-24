@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAuth } from './auth'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import '../stylesheets/signupstyle.css'
 
 function SignupPage(){
     const [username, setUsername] = useState('')
@@ -14,6 +15,7 @@ function SignupPage(){
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
         if(password === password2)
         {
             try {
@@ -37,21 +39,23 @@ function SignupPage(){
     }
 
     return <article>
-        <h2>Sign up</h2>
-        <form>
-            <label htmlFor='username'>Username</label>
-            <input type='text' id='username' onChange={(e)=>setUsername(e.target.value)}/>
-        </form>
-        <form>
-            <label htmlFor='password'>Password</label>
-            <input type='text' id='password' onChange={(e)=>setPassword(e.target.value)}/>
-        </form>
-        <form>
-            <label htmlFor='passwordR'>Repeat password</label>
-            <input type='text' id='passwordR' onChange={(e)=>setPassword2(e.target.value)}/>
-        </form>
-        {errorMsg && <p>{errorMsg}</p>}
-        <button type='submit' onClick={handleSubmit}>Sign up</button> 
+        <div className='signUpContainer'>
+            <h3>Sign up</h3>
+            <form>
+                <label htmlFor='username'>Username</label>
+                <input type='text' id='username' onChange={(e)=>setUsername(e.target.value)}/>
+            </form>
+            <form>
+                <label htmlFor='password'>Password</label>
+                <input type='password' id='password' onChange={(e)=>setPassword(e.target.value)}/>
+            </form>
+            <form>
+                <label htmlFor='passwordR'>Repeat password</label>
+                <input type='password' id='passwordR' onChange={(e)=>setPassword2(e.target.value)}/>
+            </form>
+            {errorMsg && <p className='errorMessage'>{errorMsg}</p>}
+            <button type='submit' onClick={handleSubmit}>Sign up</button> 
+        </div>
     </article>
 }
 

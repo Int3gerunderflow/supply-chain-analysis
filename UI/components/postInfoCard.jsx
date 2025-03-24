@@ -1,5 +1,5 @@
 import React from 'react'
-import './postInfoCard.css'
+import '../stylesheets/postInfoCard.css'
 
 const PostInfoCard = ({product, company, description}) =>{
     return (<section className='postInfo'>

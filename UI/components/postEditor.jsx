@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import axios from "axios"
-import './postEditor.css';
+import '../stylesheets/postEditor.css';
 import { getCreatorDataContext } from "./creatorData";
 import { PostEditorContext } from "./postEditorContext";
 

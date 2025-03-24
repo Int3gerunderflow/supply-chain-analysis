@@ -9,7 +9,7 @@ import { getCreatorDataContext } from './creatorData';
 import { PostEditorProvider } from './postEditorContext';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import '../stylesheets/creatorPage.css';
-import './makeOrEditSupplier.css';
+import '../stylesheets/makeOrEditSupplier.css';
 
 
 

@@ -4,6 +4,7 @@ import { useAuth } from './auth'
 import { useNavigate } from 'react-router-dom'
 import { getMapDataContext } from './mapData';
 import { getCreatorDataContext } from './creatorData';
+import '../stylesheets/userProfilePage.css'
 
 function UserHomePage(){
     const [userPosts, setUserPosts] = useState([])
@@ -30,12 +31,15 @@ function UserHomePage(){
             finalAssembly: null,
         }
         setCreatorData(creatorData);
-        navigate("/create", { replace: true })
+        navigate("/create")
     }
 
     return(
         <React.Fragment>
-            <h2>hi</h2>
+            <section className='welcomeBanner'>
+                <h2>Welcome {payload.username} 👋</h2>
+            </section>
+            
             {userPosts.map((item)=> {
                 const data = {postID:item.postID, ...item}
                 return <PostDescriptionCard key={item.postID} {...data}/>

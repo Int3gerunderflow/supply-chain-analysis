@@ -1,5 +1,5 @@
 import React from 'react'
-import './supplyInfoCard.css'
+import '../stylesheets/supplyInfoCard.css'
 
 const SupplierInfoCard = ({name,description}) =>{
     return (<section className='supplyInfo'>

@@ -7,7 +7,7 @@ import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import PostInfoCard from './postInfoCard';
 import SupplierInfoCard from './supplyInfoCard';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import './popup.css'
+import '../stylesheets/popup.css'
 
 
 

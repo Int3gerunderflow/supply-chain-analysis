@@ -1,0 +1,24 @@
+section.homeSection{
+    font-family: 'Sarabun','Helvetica';
+    font-weight: 700;
+    height:25em;
+    display:flex;
+    background: rgb(1,17,64);
+    background: linear-gradient(115deg, rgba(1,17,64,1) 0%, rgba(1,17,64,1) 55%, rgba(1,17,64,1) 55%, rgba(255, 255, 255, 0) 69%);
+    align-items: center;
+}
+
+.homeSection h1 {
+    margin:0px 1em;
+    margin-bottom: 20px;
+    margin-right:-10em;
+    color: rgb(255,255,255);
+    font-size: 48px;
+}
+
+.homeSection img{
+    position: relative;
+    height: 25em;
+    z-index: -1;
+    margin-left: auto;
+}

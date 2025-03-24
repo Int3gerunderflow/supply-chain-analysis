@@ -1,34 +1,46 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { useAuth } from "./auth";
 import { ProtectedRoute } from "./protectedRoutes";
 import CreatorDataProvider from "./creatorData";
 import LoginPage from "./login";
 import MapPage from "./mapPage";
+import HomePage from "./homePage";
 import UserHomePage from "./userHomePage";
 import CreatorPage from "./creatorPage";
 import SignupPage from "./signup";
+import Navbar from "./navbar";
 import React from 'react'
 
 function Routes() {
-    const { token } = useAuth();
 
     //routes for all users
     const publicRoutes = [
         {
             path: "/",
-            element: <h1>Home page?</h1>
+            element: <>
+                <Navbar/>
+                <HomePage/>
+            </>
         },
         {
             path: "/map",
-            element: <MapPage/>
+            element: <>
+                <Navbar/>
+                <MapPage/>
+            </>
         },
         {
             path: "/login",
-            element: <LoginPage/>
+            element: <>
+                <Navbar/>
+                <LoginPage/>
+            </>
         },
         {
             path:"/signup",
-            element: <SignupPage/>
+            element: <>
+                <Navbar/>
+                <SignupPage/>
+            </>
         }
     ];
 
@@ -39,11 +51,17 @@ function Routes() {
         children: [
             {
                 path:"/profile",
-                element: <UserHomePage/>
+                element: <>
+                    <Navbar/>
+                    <UserHomePage/>
+                </>
             },
             {
                 path:"/create",
-                element: <CreatorPage/>
+                element: <>
+                    <Navbar/>
+                    <CreatorPage/>
+                </>
             },
         ]
     }]

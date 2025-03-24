@@ -9,6 +9,7 @@ const createUser = async (req,res)=>{
 
     const payload = {
         id: newlyMadeUser.id,
+        username: newlyMadeUser.username,
         pfp: newlyMadeUser.profilePicLocation
     }
 
@@ -62,6 +63,7 @@ const loginUser = async (req,res)=>{
     {
         const payload = {
             id: user.id,
+            username: user.username,
             pfp: user.profilePicLocation
         }
         jwt.sign(payload, process.env.AUTHKEY, {expiresIn: "30d"}, (err, token)=>{
