@@ -1,0 +1,13 @@
+.welcomeBanner h2{
+    margin:0;
+    background-color: #bababa;
+    padding:1em;
+    font-size:48px;
+    padding-bottom: 1.5em;
+}
+
+.postsGrid{
+    display: grid;
+    grid: repeat(3, 33fr) / auto-flow 33fr;
+    justify-items: center;
+}

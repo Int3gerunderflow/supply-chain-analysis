@@ -40,10 +40,13 @@ function UserHomePage(){
                 <h2>Welcome {payload.username} 👋</h2>
             </section>
             
-            {userPosts.map((item)=> {
-                const data = {postID:item.postID, ...item}
-                return <PostDescriptionCard key={item.postID} {...data}/>
-            })}
+            <article className='postsGrid'>
+                {userPosts.map((item)=> {
+                    const data = {postID:item.postID, ...item}
+                    return <PostDescriptionCard key={item.postID} {...data}/>
+                })}
+            </article>
+            
             <button onClick={makeNewPost}>Make new post</button>
         </React.Fragment>
     )
@@ -59,7 +62,7 @@ const PostDescriptionCard = ({postID, adjacencyList, product, company, finalAsse
         navigate("/map", { replace: true })
     }
     return(
-        <div onClick={handleClick}>
+        <div className="postIDCard" onClick={handleClick}>
             <h3>{product}</h3>
             <h4>{company}</h4>
         </div>

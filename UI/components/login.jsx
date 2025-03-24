@@ -30,7 +30,7 @@ function LoginPage(){
         }
     }
 
-    return <article>
+    return <article className='loginArticle'>
         <div className='login-container'>
             <h3>Login</h3>
             <form>
