@@ -4,7 +4,7 @@ section.homeSection{
     height:25em;
     display:flex;
     background: rgb(1,17,64);
-    background: linear-gradient(115deg, rgba(1,17,64,1) 0%, rgba(1,17,64,1) 55%, rgba(1,17,64,1) 55%, rgba(255, 255, 255, 0) 69%);
+    background: linear-gradient(112deg, rgba(1, 17, 64, 1) 50%, rgba(154, 23, 209, 0)85%);
     align-items: center;
 }
 

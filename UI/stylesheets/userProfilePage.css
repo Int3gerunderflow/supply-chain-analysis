@@ -1,9 +1,8 @@
 .welcomeBanner h2{
     margin:0;
     background-color: #bababa;
-    padding:1em;
+    padding:1.1em 1em;
     font-size:48px;
-    padding-bottom: 1.5em;
 }
 
 .postsGrid{
