@@ -1,10 +1,12 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ProtectedRoute } from "./protectedRoutes";
 import CreatorDataProvider from "./creatorData";
+import { PostEditorProvider } from "./postEditorContext";
 import LoginPage from "./login";
 import MapPage from "./mapPage";
 import HomePage from "./homePage";
 import UserHomePage from "./userHomePage";
+import MakeNewPostPage from "./makeNewPost";
 import CreatorPage from "./creatorPage";
 import SignupPage from "./signup";
 import Navbar from "./navbar";
@@ -23,10 +25,10 @@ function Routes() {
         },
         {
             path: "/map",
-            element: <>
+            element: <div className="fullPage">
                 <Navbar/>
                 <MapPage/>
-            </>
+            </div>
         },
         {
             path: "/login",
@@ -46,7 +48,7 @@ function Routes() {
 
     //routes for only authenticated users
     const authenticatedRoutes = [{
-        path: "/",
+        path: "",
         element: <CreatorDataProvider><ProtectedRoute/></CreatorDataProvider>,
         children: [
             {
@@ -58,11 +60,18 @@ function Routes() {
             },
             {
                 path:"/create",
-                element: <>
+                element: <div className="fullPage">
                     <Navbar/>
                     <CreatorPage/>
-                </>
+                </div>
             },
+            {
+                path:"/createnew",
+                element: <>
+                    <Navbar/>
+                    <PostEditorProvider><MakeNewPostPage/></PostEditorProvider>
+                </>
+            }
         ]
     }]
 

@@ -5,7 +5,6 @@ import {Map as MapLibreMap, NavigationControl, Popup, useControl} from 'react-ma
 import {ScatterplotLayer, ArcLayer} from 'deck.gl';
 import {MapboxOverlay as DeckOverlay} from '@deck.gl/mapbox';
 import PostInfoCard from './postInfoCard';
-import SupplierInfoCard from './supplyInfoCard';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import '../stylesheets/popup.css'
 
@@ -148,8 +147,6 @@ function MapPage() {
 
   return (
     <>
-      <PostInfoCard product={postInfo.product} company={postInfo.company} description={postInfo.description}/>
-      {/* <SupplierInfoCard name={selected.name || ''} description={selected.description || ''}/> */}
       <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false}
         onClick={(e)=>setSelected(null)}>
         {selected && (
@@ -170,6 +167,7 @@ function MapPage() {
                   </div>
                 </Popup>
               )}        
+        <PostInfoCard product={postInfo.product} company={postInfo.company} description={postInfo.description}/>
         <DeckGLOverlay layers={layers} /* interleaved*/ />
         <NavigationControl position="top-right" />
       </MapLibreMap>

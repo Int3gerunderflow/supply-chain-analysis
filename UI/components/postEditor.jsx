@@ -37,19 +37,6 @@ const PostEditor = ({userIDprop}) =>
         }
     }
 
-    const handleSubmitNewPost = async (e) => {
-        e.preventDefault()
-        const result = await axios.post(`http://localhost:8000/posts`,{
-            userID,
-            product,
-            company,
-            description,
-            finalAssembly: -1
-        })
-        creatorData.postID = result.data.insertId
-        setCreatorData(creatorData)
-    }
-
     const handleUpdatePost = async (e) => {
         e.preventDefault()
         const postID= creatorData.postID

@@ -31,7 +31,7 @@ function UserHomePage(){
             finalAssembly: null,
         }
         setCreatorData(creatorData);
-        navigate("/create")
+        navigate("/createnew")
     }
 
     return(
@@ -43,6 +43,7 @@ function UserHomePage(){
             <article className='postsGrid'>
                 <div className="postIDCard">
                     <h3>add new</h3>
+                    <button onClick={makeNewPost}>Make new post</button>
                 </div>
                 {userPosts.map((item)=> {
                     const data = {postID:item.postID, ...item}
@@ -50,7 +51,7 @@ function UserHomePage(){
                 })}
             </article>
             
-            <button onClick={makeNewPost}>Make new post</button>
+            
         </React.Fragment>
     )
 
@@ -62,7 +63,7 @@ const PostDescriptionCard = ({postID, adjacencyList, product, company, finalAsse
 
     const handleClick = () => {
         setGraphData({postID, adjacencyList, finalAssembly})
-        navigate("/map", { replace: true })
+        navigate("/map")
     }
     return(
         <div className="postIDCard" onClick={handleClick}>
