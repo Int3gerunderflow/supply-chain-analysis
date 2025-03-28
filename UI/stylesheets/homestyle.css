@@ -1,4 +1,4 @@
-section.homeSection{
+section.heroSection{
     font-family: 'Sarabun','Helvetica';
     font-weight: 700;
     height:25em;
@@ -8,7 +8,7 @@ section.homeSection{
     align-items: center;
 }
 
-.homeSection h1 {
+.heroSection h1 {
     margin:0px 1em;
     margin-bottom: 20px;
     margin-right:-10em;
@@ -16,9 +16,27 @@ section.homeSection{
     font-size: 48px;
 }
 
-.homeSection img{
+.heroSection img{
     position: relative;
     height: 25em;
     z-index: -1;
     margin-left: auto;
+}
+
+.firstInfoSection{
+    background-color: #FFFAF4;
+    padding-left:3em;
+}
+
+.firstInfoSection h2{
+    font-size: 28px;
+    margin:0;
+    padding-top:2em;
+    color:#152657;
+}
+
+.firstInfoSection p{
+    font-family: 'Sarabun', 'Helvetica';
+    font-weight:bold;
+    color:#141414;
 }

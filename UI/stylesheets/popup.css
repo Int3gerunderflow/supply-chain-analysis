@@ -8,12 +8,12 @@
     max-height: 45vh;
 }
 
-::-webkit-scrollbar {
+::-webkit-scrollbar.popupContent {
     width: 6px;
     padding-left: 5px;
 }
 
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb.popupContent {
     background: #9a9a9a;
     border-radius: 18px;
 }

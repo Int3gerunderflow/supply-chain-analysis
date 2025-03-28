@@ -41,6 +41,9 @@ function UserHomePage(){
             </section>
             
             <article className='postsGrid'>
+                <div className="postIDCard">
+                    <h3>add new</h3>
+                </div>
                 {userPosts.map((item)=> {
                     const data = {postID:item.postID, ...item}
                     return <PostDescriptionCard key={item.postID} {...data}/>
@@ -65,6 +68,7 @@ const PostDescriptionCard = ({postID, adjacencyList, product, company, finalAsse
         <div className="postIDCard" onClick={handleClick}>
             <h3>{product}</h3>
             <h4>{company}</h4>
+            <button>Edit</button>
         </div>
     )
 }
