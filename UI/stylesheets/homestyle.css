@@ -29,6 +29,7 @@ section.heroSection{
 }
 
 .firstInfoSection h2{
+    font-family: 'Noto Sans', 'Helvetica';
     font-size: 28px;
     margin:0;
     padding-top:2em;
@@ -48,6 +49,7 @@ section.heroSection{
 }
 
 .secondInfoSection h2{
+    font-family: 'Noto Sans', 'Helvetica';
     font-size: 28px;
     margin:0;
     padding-top:2em;

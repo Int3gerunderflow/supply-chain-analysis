@@ -3,6 +3,14 @@ section.makeNewPost {
     justify-content: center;
 }
 
+section.makeNewPost h3{
+    font-size:26px;
+    color:#152657;
+    margin-top:0;
+    margin-bottom: 1.5em;
+    justify-self: center;
+}
+
 .makeNewPost article{
     margin-top: 5em;
     padding:2em;
@@ -20,7 +28,7 @@ section.makeNewPost {
 }
 
 .makeNewPost button{
-    margin-top:1em;
+    margin-top:1.5em;
     width: 100%;
     padding: 0.75rem;
     border: none;

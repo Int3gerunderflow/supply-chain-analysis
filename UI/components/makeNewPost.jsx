@@ -35,6 +35,7 @@ function MakeNewPostPage()
     return(
         <section className="makeNewPost">
             <article>
+                <h3>Make a new post</h3>
                 <form>
                     <label htmlFor='product'>Product Name:</label>
                     <input type='text' id='product' value={product || ''} onChange={(e)=>setProduct(e.target.value)}/>

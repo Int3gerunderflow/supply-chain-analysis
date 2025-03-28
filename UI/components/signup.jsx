@@ -38,7 +38,7 @@ function SignupPage(){
         }
     }
 
-    return <article className='signupArticle'>
+    return <article className='signUpArticle'>
         <div className='signUpContainer'>
             <h3>Sign up</h3>
             <form>

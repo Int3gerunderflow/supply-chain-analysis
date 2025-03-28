@@ -1,4 +1,6 @@
 .postInfo {
+    display:flex;
+    flex-direction: column;
     margin:1em;
     padding:2em;
     position: absolute;
@@ -7,25 +9,41 @@
     box-shadow: 0px 3px 18px -6px rgba(0,0,0,0.59);
     border-radius: 18px;
     font-family: 'Sarabun','Helvetica';
-    width: max(20%,18em);
-    max-height: 40vh;
+    width: max(18%,16em);
+    max-height: 80vh;
     z-index: 7;
 }
 
-h2{
+.postInfo h2{
     margin-top:0.2em;
     font-family: 'Noto Sans', 'Helvetica';
-    margin-bottom: .2em;
-
+    margin-bottom: .4em;
+    font-size:22px;
 }
 
-h4{
+.postInfo h4{
+    font-size:16px;
     font-family: 'Noto Sans', 'Helvetica';
     margin-top:0em;
     margin-bottom:1.2em;
 }
 
-p{
+.postInfoContent::-webkit-scrollbar {
+    width: 6px;
+    padding-left: 5px;
+}
+
+.postInfoContent::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 18px;
+}
+
+div.postInfoContent{
+    overflow-y: auto;
+    height:100%;
+}
+
+.postInfo p{
     margin:0px;
     margin-bottom: 0.2em;
     font-size:15px;
