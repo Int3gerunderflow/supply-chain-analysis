@@ -61,6 +61,8 @@ function CreatorPage() {
           const value = Object.values(entry)[0]
           formattedAdjList[key] = value
         }
+        creatorData.adjacencyList = formattedAdjList
+        setCreatorData(creatorData)
         supplierList = await getAllSuppliers(formattedAdjList)
       }
       else

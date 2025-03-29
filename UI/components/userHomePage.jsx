@@ -59,17 +59,25 @@ function UserHomePage(){
 
 const PostDescriptionCard = ({postID, adjacencyList, product, company, finalAssembly})=>{
     const { setGraphData } = getMapDataContext();
+    const { setCreatorData } = getCreatorDataContext();
     const navigate = useNavigate()
 
     const handleClick = () => {
         setGraphData({postID, adjacencyList, finalAssembly})
         navigate("/map")
     }
+
+    const handleClickEdit = () => {
+        setCreatorData({postID, adjacencyList:[], finalAssembly})
+        navigate("/create")
+    }
+
     return(
-        <div className="postIDCard" onClick={handleClick}>
+        <div className="postIDCard">
             <h3>{product}</h3>
             <h4>{company}</h4>
-            <button>Edit</button>
+            <button onClick={handleClickEdit}>Edit</button>
+            <button onClick={handleClick}>View</button>
         </div>
     )
 }
