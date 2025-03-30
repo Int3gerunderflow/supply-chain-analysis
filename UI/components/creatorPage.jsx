@@ -50,26 +50,18 @@ function CreatorPage() {
   useEffect(() => {
     const getSupplierInfo = async () => {
       let supplierList = []
-      if(postID)
+      const suppListFromAPI = await axios.get(`http://localhost:8000/posts/${postID}`)
+      const formattedAdjList = {}
+      //transform the data from the server to the appropriate format for the frontend
+      for(const entry of suppListFromAPI.data.adjacencyList)
       {
-        const suppListFromAPI = await axios.get(`http://localhost:8000/posts/${postID}`)
-        const formattedAdjList = {}
-        //transform the data from the server to the appropriate format for the frontend
-        for(const entry of suppListFromAPI.data.adjacencyList)
-        {
-          const key = Object.keys(entry)[0]
-          const value = Object.values(entry)[0]
-          formattedAdjList[key] = value
-        }
-        creatorData.adjacencyList = formattedAdjList
-        setCreatorData(creatorData)
-        supplierList = await getAllSuppliers(formattedAdjList)
+        const key = Object.keys(entry)[0]
+        const value = Object.values(entry)[0]
+        formattedAdjList[key] = value
       }
-      else
-      {
-        supplierList = await getAllSuppliers(creatorData.adjacencyList);
-      }
-
+      creatorData.adjacencyList = formattedAdjList
+      setCreatorData(creatorData)
+      supplierList = await getAllSuppliers(formattedAdjList)
       setSupplyData(supplierList)
     };
     getSupplierInfo();
@@ -353,9 +345,19 @@ function CreatorPage() {
         setSupplyData(supplierList)
 
         //update the adjacency list
-        let updatedcreatorData = creatorData
+        let updatedcreatorData = structuredClone(creatorData)
         updatedcreatorData.adjacencyList[supplyID] = []
-        setCreatorData(updatedcreatorData)
+        try{
+          axios.put(`http://localhost:8000/posts/${postID}/adjacencyList`,{
+            userID,
+            adjacencyList: updatedcreatorData.adjacencyList
+          }).then(()=>setCreatorData(updatedcreatorData))
+        }
+        catch(error)
+        {
+          console.log(error)
+        }
+        
 
 
         //for some reason deck.gl won't rerender based soley off if the
@@ -387,16 +389,15 @@ function CreatorPage() {
       else if (secondVertexRef.current === -1) {
         const rollbackCreator = creatorData
         //once again perform a deep copy so that deck properly updates the data
-        const newCreatorData = structuredClone(creatorData)
+        let newCreatorData = structuredClone(creatorData)
         secondVertexRef.current=supplyID
         newCreatorData.adjacencyList[firstVertexRef.current].push(secondVertexRef.current)
-        newCreatorData.adjacencyList[secondVertexRef.current].push(firstVertexRef.current)
-        setCreatorData(newCreatorData)      
+        newCreatorData.adjacencyList[secondVertexRef.current].push(firstVertexRef.current)     
         try{
           axios.put(`http://localhost:8000/posts/${postID}/adjacencyList`,{
             userID,
-            adjacencyList: creatorData.adjacencyList
-          })
+            adjacencyList: newCreatorData.adjacencyList
+          }).then(()=>setCreatorData(newCreatorData))
         }
         catch(error)
         {
@@ -418,9 +419,9 @@ function CreatorPage() {
 
       //we first have to iterate through the adjacency list to
       //remove references to this supplier entirely
-      const clonedSupplyData = structuredClone(supplyData)
+      let clonedSupplyData = structuredClone(supplyData)
       const rollbackCreator = creatorData
-      const clonedCreatorData = structuredClone(creatorData)
+      let clonedCreatorData = structuredClone(creatorData)
       const newSupplyData = clonedSupplyData.filter((item)=>item.supplyID!=supplyID)
 
       const newAdjList = {}
@@ -439,17 +440,16 @@ function CreatorPage() {
         const updatedAdjacencies = value.filter((vertex)=>vertex != supplyID)
         newAdjList[key]=updatedAdjacencies
       }
-
-      
+     
       clonedCreatorData.adjacencyList=newAdjList
-      setSupplyData(newSupplyData)
-      setCreatorData(clonedCreatorData)
-
 
       try{
         axios.put(`http://localhost:8000/posts/${postID}/adjacencyList`,{
           userID,
-          adjacencyList: creatorData.adjacencyList
+          adjacencyList: clonedCreatorData.adjacencyList
+        }).then(()=>{
+          setSupplyData(newSupplyData)
+          setCreatorData(clonedCreatorData)
         })
       }
       catch(error)
@@ -477,8 +477,7 @@ function CreatorPage() {
       //we first have to iterate through the adjacency list to
       //remove references to this supplier entirely
       const rollbackCreator = creatorData
-      const clonedCreatorData = structuredClone(creatorData)
-      console.log(creatorData.adjacencyList)
+      let clonedCreatorData = structuredClone(creatorData)
 
       const newAdjList = {}
       //for the two verticies in the relationship, find their keys in the adjacency list, 
@@ -500,17 +499,14 @@ function CreatorPage() {
         }        
       }
 
-      
       clonedCreatorData.adjacencyList=newAdjList
-      console.log(clonedCreatorData.adjacencyList)
-      setCreatorData(clonedCreatorData)
-
 
       try{
         axios.put(`http://localhost:8000/posts/${postID}/adjacencyList`,{
           userID,
-          adjacencyList: creatorData.adjacencyList
-        })
+          adjacencyList: clonedCreatorData.adjacencyList
+        }).then(()=>setCreatorData(clonedCreatorData))
+        
       }
       catch(error)
       {
@@ -568,10 +564,6 @@ function CreatorPage() {
       <ToolBar/>
     </div>
 
-    <PostEditorProvider>
-      <PostEditor userIDprop={userID}/>
-    </PostEditorProvider>
-
     <MakeOrEditSupplier n1={namespace} setn1={setnamespace}/>
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClickSupplier(e)}>
       {selected && (
@@ -589,6 +581,9 @@ function CreatorPage() {
           {selected.name} ({selected.description})
         </Popup>
       )}
+      <PostEditorProvider>
+        <PostEditor userIDprop={userID}/>
+      </PostEditorProvider>
       <DeckGLOverlay layers={layers} /* interleaved*/ />
       <NavigationControl position="top-right" />
     </MapLibreMap>
