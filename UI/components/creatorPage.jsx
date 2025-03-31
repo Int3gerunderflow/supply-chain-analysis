@@ -206,7 +206,6 @@ function CreatorPage() {
                 onMouseLeave={(e)=>e.target.style.backgroundColor = deleteColor}
                 onLoad={(e)=>e.target.style.backgroundColor = deleteColor}
                 />
-            <p>{action}</p>
         </div>
     )
   }
@@ -287,7 +286,7 @@ function CreatorPage() {
             </form>
             <form>
                 <label htmlFor='supplierDesc'>Description</label>
-                <input type='text' id='supplierDesc' value={newSupplierDesc}
+                <textarea rows="4" id='supplierDesc' value={newSupplierDesc}
                   onChange={(e)=>setNewSupplierDesc(e.target.value)}/>
             </form>
             <button type='submit' onClick={handleSubmit}>Save</button> 
@@ -551,7 +550,8 @@ function CreatorPage() {
         data: expandedAdjList,
         getColor:[234, 60, 152],
         widthUnits:'pixels',
-        getWidth: 8,
+        capRounded:true,
+        getWidth: 7,
         getPath: d => [[d.source[0], d.source[1]],[d.target[0], d.target[1]]],
         pickable: true,
         onClick: info => handleMapClickOnRelationship(info)
@@ -564,13 +564,12 @@ function CreatorPage() {
       <ToolBar/>
     </div>
 
-    <MakeOrEditSupplier n1={namespace} setn1={setnamespace}/>
     <MapLibreMap initialViewState={INITIAL_VIEW_STATE} mapStyle={MAP_STYLE} dragRotate={false} onClick={(e)=>handleMapClickSupplier(e)}>
-      {selected && (
+      {/* {selected && (
         <Popup
           key={selected.supplyID}
           anchor="bottom"
-          style={{zIndex: 10}} /* position above deck.gl canvas */
+          style={{zIndex: 10}} // position above deck.gl canvas 
           longitude={selected.longitude}
           latitude={selected.latitude}
           onClose={()=>{
@@ -580,10 +579,11 @@ function CreatorPage() {
         >
           {selected.name} ({selected.description})
         </Popup>
-      )}
+      )} */}
       <PostEditorProvider>
         <PostEditor userIDprop={userID}/>
       </PostEditorProvider>
+      <MakeOrEditSupplier n1={namespace} setn1={setnamespace}/>
       <DeckGLOverlay layers={layers} /* interleaved*/ />
       <NavigationControl position="top-right" />
     </MapLibreMap>

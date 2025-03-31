@@ -1,7 +1,56 @@
 .supplierEditor {
     position: absolute;
-    z-index: 11;
+    z-index: 10;
+    margin:1em;
+    margin-top:33em;
+    padding:2em;
     background-color: rgb(255,255,255);
-    margin-top:30%;
-    box-shadow: 0px 3px 21px -6px rgba(0,0,0,0.59);
+    box-shadow: 0px 3px 18px -6px rgba(0,0,0,0.59);
+    border-radius: 18px;
+    font-family: 'Sarabun','Helvetica';
+    width: max(18%,22em);
+}
+
+.supplierEditor label{
+    margin-top:0.2em;
+    font-family: 'Noto Sans', 'Helvetica';
+    font-weight: 500;
+    margin-bottom: .4em;
+    font-size:16px;
+}
+
+.supplierEditor textarea{
+    resize: none;
+    width:100%;
+    font-family: 'Sarabun', 'Helvetica';
+}
+
+.supplierEditor button{
+    width:100%;
+}
+
+.supplierEditor input{
+    font-family: 'Sarabun', 'Helvetica';
+    width:100%
+}
+
+.postInfoContent::-webkit-scrollbar {
+    width: 6px;
+    padding-left: 5px;
+}
+
+.postInfoContent::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 18px;
+}
+
+div.postInfoContent{
+    overflow-y: auto;
+    height:100%;
+}
+
+.supplierEditor p{
+    margin:0px;
+    margin-bottom: 0.2em;
+    font-size:15px;
 }

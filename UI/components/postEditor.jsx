@@ -61,7 +61,7 @@ const PostEditor = ({userIDprop}) =>
             </form>
             <form>
                 <label htmlFor='desc'>Description:</label>
-                <input type='text' id='desc' value={description || ''} onChange={(e)=>setDescription(e.target.value)}/>
+                <textarea rows="10" id='desc' value={description || ''} onChange={(e)=>setDescription(e.target.value)}/>
             </form>
             <button type='submit' onClick={handleSubmit}>Save</button> 
         </article>
