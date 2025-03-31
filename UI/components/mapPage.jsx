@@ -11,9 +11,9 @@ import '../stylesheets/popup.css'
 
 
 const INITIAL_VIEW_STATE = {
-  latitude: 51.47,
-  longitude: 0.45,
-  zoom: 4,
+  latitude: 30,
+  longitude: 0,
+  zoom: 1.7,
   bearing: 0,
   pitch: 30
 };
@@ -122,7 +122,7 @@ function MapPage() {
         return coordinates
       },
       getRadius: 25,
-      getFillColor: [255, 140, 0,180],
+      getFillColor: [255,140,0,180],
       getLineColor: [0, 0, 0],
       highlightColor: [200,0,80,128],
       getLineWidth: 10,

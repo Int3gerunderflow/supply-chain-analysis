@@ -41,8 +41,8 @@ function UserHomePage(){
             </section>
             
             <article className='postsGrid'>
-                <div className="postIDCard">
-                    <h3>add new</h3>
+                <div id="addNewPostCard">
+                    <h3>Make New Post</h3>
                     <button onClick={makeNewPost}>Make new post</button>
                 </div>
                 {userPosts.map((item)=> {
@@ -76,8 +76,10 @@ const PostDescriptionCard = ({postID, adjacencyList, product, company, finalAsse
         <div className="postIDCard">
             <h3>{product}</h3>
             <h4>{company}</h4>
-            <button onClick={handleClickEdit}>Edit</button>
-            <button onClick={handleClick}>View</button>
+            <div className='inlineButtons'>
+                <button onClick={handleClickEdit}>Edit</button>
+                <button onClick={handleClick}>View</button>
+            </div>
         </div>
     )
 }
