@@ -35,6 +35,10 @@ div.postIDCard{
     color: #2f2f2f;
 }
 
+img#deleteBin {
+    height:20px;
+}
+
 .inlineButtons{
     display: flex;
     justify-content: space-between;

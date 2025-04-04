@@ -28,6 +28,7 @@ const PostDescriptionCard = ({postID, adjacencyList, product, company, finalAsse
     return(
         <div className="postIDCard">
             <h3>{product}</h3>
+            {showEdit && <img id="deleteBin" src="../assets/bin.svg"></img>}
             <h4>{company}</h4>
             <div className='inlineButtons'>
                 {showEdit && <button onClick={handleClickEdit}>Edit</button>}
