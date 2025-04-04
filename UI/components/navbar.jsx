@@ -34,7 +34,7 @@ function Navbar()
 
     return <nav>
         <p onClick={(e)=>navigate("/")}>Home</p>
-        <p>Community</p>
+        <p onClick={(e)=>navigate("/community")}>Community</p>
         {token && <p onClick={(e)=>navigate("/profile")}>My Posts</p>}
         <p className="loginNav" onClick={(e)=>handleLogInOut(e)}>{logInOut}</p>
             

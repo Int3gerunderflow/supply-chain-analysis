@@ -1,4 +1,5 @@
 const { 
+    getAllPublicPostsInDatabase,
     getAllPostsAssociatedByUserID,
     getSupplyChainPostDetails,
     getSupplierByID,
@@ -10,6 +11,11 @@ const {
     deletePostByID,
     deleteSupplierByID
  } = require("../models/supplyChainModel");
+
+const getAllPublicPosts = async (req,res) => {
+    const result = await getAllPublicPostsInDatabase();
+    res.send(result)
+}
 
 const getUsersPosts = async (req,res) => {
     const userID = req.params.userID
@@ -109,6 +115,7 @@ const deleteSupplier = async (req,res) => {
 }
 
 module.exports = { 
+    getAllPublicPosts,
     getUsersPosts,
     getPostDetails, 
     getSupplierDetails, 

@@ -4,6 +4,7 @@ import { useAuth } from './auth'
 import { useNavigate } from 'react-router-dom'
 import { getMapDataContext } from './mapData';
 import { getCreatorDataContext } from './creatorData';
+import PostDescriptionCard from './postDescriptionCard';
 import '../stylesheets/userProfilePage.css'
 
 function UserHomePage(){
@@ -46,42 +47,14 @@ function UserHomePage(){
                     <button onClick={makeNewPost}>Make new post</button>
                 </div>
                 {userPosts.map((item)=> {
-                    const data = {postID:item.postID, ...item}
+                    const data = {postID:item.postID, ...item, showEdit:true}
                     return <PostDescriptionCard key={item.postID} {...data}/>
                 })}
-            </article>
-            
-            
+            </article>  
         </React.Fragment>
     )
-
 }
 
-const PostDescriptionCard = ({postID, adjacencyList, product, company, finalAssembly})=>{
-    const { setGraphData } = getMapDataContext();
-    const { setCreatorData } = getCreatorDataContext();
-    const navigate = useNavigate()
 
-    const handleClick = () => {
-        setGraphData({postID, adjacencyList, finalAssembly})
-        navigate("/map")
-    }
-
-    const handleClickEdit = () => {
-        setCreatorData({postID, adjacencyList:[], finalAssembly})
-        navigate("/create")
-    }
-
-    return(
-        <div className="postIDCard">
-            <h3>{product}</h3>
-            <h4>{company}</h4>
-            <div className='inlineButtons'>
-                <button onClick={handleClickEdit}>Edit</button>
-                <button onClick={handleClick}>View</button>
-            </div>
-        </div>
-    )
-}
 
 export default UserHomePage

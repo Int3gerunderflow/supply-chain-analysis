@@ -1,0 +1,12 @@
+section.communityHeader{
+    background-color: #021859;
+    margin-bottom: 2em;
+}
+
+.communityHeader h2{
+    font-family: 'Noto Sans', 'Helvetica';
+    color:#ffffff;
+    padding:1.1em 1em;
+    font-size:42px;
+    margin:0;
+}

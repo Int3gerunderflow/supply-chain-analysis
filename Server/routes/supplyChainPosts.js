@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const supplyChainController = require('../controllers/supplyChainController')
 
+//GET ALL PUBLIC POSTS
+router.get('/', supplyChainController.getAllPublicPosts)
+
 //GET ONE POST BY ITS ID
 
 router.get('/:postID', supplyChainController.getPostDetails)

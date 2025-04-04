@@ -20,7 +20,14 @@ they do best. When it comes time to finally build a product, that
 specialization can be leveraged to create something no single
 company could ever do. </p>
                 </article>
-                <img></img>
+                <div id="companyGrid">
+                    <img src="../assets/Airbus-logo.png"></img>
+                    <img src="../assets/Apple_logo_grey.png"></img>
+                    <img src="../assets/Sony_logo.svg"></img>
+                    <img src="../assets/coca-cola-logo.png"></img>
+                    <img src="../assets/Samsung-Logo.png"></img>
+                    <img src="../assets/honda-logo.png"></img>
+                </div>
             </section>
             <section className="secondInfoSection">
                 <img src="../assets/visualDemo.png"></img>

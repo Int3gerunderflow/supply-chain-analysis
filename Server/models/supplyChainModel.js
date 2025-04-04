@@ -9,6 +9,13 @@ const connection = mysql.createPool({
 });
 
 //main methods associated with database operations
+
+const getAllPublicPostsInDatabase = async () => {
+    //use execute instead of query since it caches results
+    const [result,fields] = await connection.promise().execute(`SELECT * FROM posts WHERE public=true;`)
+    return result
+}
+
 const getAllPostsAssociatedByUserID = async (userID) => {
     //use execute instead of query since it caches results
     const [result,fields] = await connection.promise().execute(`SELECT * FROM posts WHERE userID=${userID};`)
@@ -149,6 +156,7 @@ const deleteSupplierByID = async (supplyID) => {
     } 
 }
 module.exports = { 
+    getAllPublicPostsInDatabase,
     getAllPostsAssociatedByUserID,
     getSupplyChainPostDetails, 
     getSupplierByID,

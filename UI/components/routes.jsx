@@ -7,6 +7,7 @@ import MapPage from "./mapPage";
 import HomePage from "./homePage";
 import UserHomePage from "./userHomePage";
 import MakeNewPostPage from "./makeNewPost";
+import CommunityPage from "./communityPage";
 import CreatorPage from "./creatorPage";
 import SignupPage from "./signup";
 import Navbar from "./navbar";
@@ -42,6 +43,13 @@ function Routes() {
             element: <>
                 <Navbar/>
                 <SignupPage/>
+            </>
+        },
+        {
+            path:"/community",
+            element: <>
+                <Navbar/>
+                <CreatorDataProvider><CommunityPage/></CreatorDataProvider>
             </>
         }
     ];
