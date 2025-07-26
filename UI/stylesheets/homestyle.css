@@ -110,10 +110,12 @@ section.heroSection{
     height:13em;
     margin-right: 4em;;
 }
+
 .endBanner{
     background: rgb(21,38,87);
     background: linear-gradient(49deg, rgba(21,38,87,1) 0%, rgba(133,111,152,1) 100%);
-    padding-left:3em;
+    display:flex;
+    flex-direction: column;
     padding-bottom: 2em;
 }
 
@@ -121,8 +123,15 @@ section.heroSection{
     font-family: 'Noto Sans', 'Helvetica';
     font-size: 28px;
     margin:0;
+    margin-left:14%;
     padding-top:2em;
     color:#ffffff;
+}
+
+.endBanner img{
+    margin-top:2em;
+    width:80%;
+    align-self: center;
 }
 
 .endBanner p{

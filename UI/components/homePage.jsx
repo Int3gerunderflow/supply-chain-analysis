@@ -31,6 +31,7 @@ interesting insights into the backbone behind the products you know and love.</p
                     <img src="../assets/honda-logo.png"></img>
                     <img src="../assets/nike-swoosh-logo.png"></img>
                     <img src="../assets/amazon-logo.png"></img>
+                    <img src="../assets/Starbucks_logo.webp"></img>
                 </div>
             </section>
             <section className="secondInfoSection">
@@ -55,11 +56,9 @@ start sharing insights that drive results!</p>
             </section>
             <section className="endBanner">
                 <article>
-                    <h2>A <u>world</u> of possibilites <br></br>are at your fingertips</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+                    <h2>A <u>world</u> of possibilites are at your fingertips</h2>
                 </article>
+                <img src="../assets/SanalysisEndBanner.png"></img>
             </section>
         </main>
         <footer>
