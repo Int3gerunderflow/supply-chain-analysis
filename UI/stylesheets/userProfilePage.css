@@ -26,6 +26,12 @@ div.postIDCard{
     padding: 2em;
 }
 
+div.postIDCardTitle{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .postIDCard h3{
     margin-top:0px;
     color:#152657;

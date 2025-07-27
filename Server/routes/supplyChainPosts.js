@@ -21,4 +21,6 @@ router.post('/supplier', supplyChainController.createNewSupplier)
 
 router.put('/supplier/:supplyID', supplyChainController.updateSupplier)
 
+router.delete('/:postID', supplyChainController.deletePost)
+
 module.exports = router

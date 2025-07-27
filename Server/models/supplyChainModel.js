@@ -32,8 +32,8 @@ const makeNewBlankPost = async (params) => {
     const {userID, product, company, description, finalAssembly} = params
 
     try {
-        const [result, fields] = await connection.promise().query(`INSERT INTO posts (userID, adjacencyList, product, company, description, finalAssembly) 
-            VALUES ('${userID}', JSON_ARRAY(), '${product}', '${company}', '${description}', ${finalAssembly});`);
+        const [result, fields] = await connection.promise().query(`INSERT INTO posts (userID, adjacencyList, product, company, description, finalAssembly,public) 
+            VALUES ('${userID}', JSON_ARRAY(), '${product}', '${company}', '${description}', ${finalAssembly}, 0);`);
         return result
     } catch (error) {
         console.log(error)
